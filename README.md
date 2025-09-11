@@ -1,6 +1,7 @@
 qMODES (A Global Moisture Decomposition Software Package)
 
 ----------------------------- DESCRIPTION -----------------------------
+
     This software package is used to compute the Easterly/Westerly 
     Inertio Gravity (EIG/WIG), Rossby (ROT), and Moisture (M) modes, as
     outlined in the 2025 paper (currently submitted to JGR Atmospheres)
@@ -38,6 +39,7 @@ qMODES (A Global Moisture Decomposition Software Package)
 
 
 ------------------ qMODES SOFTWARE DIRECTORY OVERVIEW -----------------
+
     The directory system for the qMODES software package immediately 
     after installation is as follows:
 
