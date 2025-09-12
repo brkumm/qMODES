@@ -48,7 +48,7 @@ qMODES (A Global Moisture Decomposition Software Package)
      |-- input_data
      |    |-- ERA_data
      |    |-- MODES_data
-     |         |-- coeff
+     |         |-- coef
      |         |-- hough
      |         |-- vsf
      |         |-- vsf_int
@@ -71,7 +71,7 @@ qMODES (A Global Moisture Decomposition Software Package)
      input_data: General directory to store all input data.
      ERA_data: Directory to store ERA input data.
      MODES_data: Directory to store MODES input data.
-     coeff: Directory to store the MODES coefficients.
+     coef: Directory to store the MODES coefficients.
      hough: Directory to store the MODE hough (and frequency) data.
      vsf: Directory to store the MODES vsf function data.
      vsf_int: Directory to store the integrated vsf data.
@@ -109,7 +109,21 @@ qMODES (A Global Moisture Decomposition Software Package)
     data for that timestep in it's own netCDF file.
     
     ---------- MODES Data ----------
-    To aquire the necessary MODES modal decomposition data you should 
+    If you would like to aquire the data that was used in the paper 
+    mentioned above the zenodo links are given below:
+
+        https://doi.org/10.5281/zenodo.12726172
+        https://doi.org/10.5281/zenodo.12724196
+        https://doi.org/10.5281/zenodo.12749244
+        https://doi.org/10.5281/zenodo.12749316
+        https://doi.org/10.5281/zenodo.12749407
+        https://doi.org/10.5281/zenodo.12749482
+        https://doi.org/10.5281/zenodo.12751158
+        https://doi.org/10.5281/zenodo.12751242
+        https://doi.org/10.5281/zenodo.12751345
+        https://doi.org/10.5281/zenodo.12751416
+
+    To aquire your own MODES modal decomposition data you should 
     contact the Zagar group at the University of Hamburg who created 
     and maintains the MODES software package. The data you will need to
     aquire from them includes the vertical structure functions (VSF's),
@@ -119,7 +133,7 @@ qMODES (A Global Moisture Decomposition Software Package)
 
     vertical structure functions (VSFs)--> input_data/MODES_data/vsf/
     Hough functions and frequencies    --> input_data/MODES_data/hough/
-    Hough coefficients                 --> input_data/MODES_data/coeff/
+    Hough coefficients                 --> input_data/MODES_data/coef/
 
     NOTE: The hough function files and frequency files should BOTH be
     stored in the input_data/MODES_data/hough/ directory.
@@ -134,19 +148,26 @@ qMODES (A Global Moisture Decomposition Software Package)
     -1. Make sure the ERA5 and MODES input data is downloaded as 
     described above.
 
-    0. Precompute the integrated vertical structure functions (VSF's) 
-       using the /src/qMODES_scripts/Calculate_Integrated_VSFs.py 
-       script and store them in the input_data/MODES_data/vsf_int/ 
-       directory. Precomputing (and storing) these values allows this
-       step to be skipped for any future runs which use the same VSF's.
+    0.  Precompute the integrated vertical structure functions (VSF's) 
+        using the /src/qMODES_scripts/Calculate_Integrated_VSFs.py 
+        script and store them in the input_data/MODES_data/vsf_int/ 
+        directory. Precomputing (and storing) these values allows this
+        step to be skipped for future runs which use the same VSF's.
 
-    1. Compute the Fourier space (qk) values by running the script 
-       /src/qMODES_scripts/Calculate_qk.py and store the results in
-       /output_data/qk_data/
+    1.  Compute the Fourier space (qk) values by running the script 
+        /src/qMODES_scripts/Calculate_qk.py and store the results in
+        /output_data/qk_data/. 
+       
+        When running the script in the command line you will need to 
+        specify the '-d' and '-m' flags/parameters which are flags for 
+        the date (in YYYYMMDD format) and MODE (EIG, WIG, or BAL) for 
+        the given run. The script will attempt tosave data for each of 
+        the different modes (EIG, WIG, or BAL) in the same file, as 
+        long as a file for that date already exists.
 
-    2. Compute the physical space values (qMODES) by running the script
-       /src/qMODES_scripts/Calculate_qMODES.py and store the results in
-       /output_data/qMODES_data/
+    2.  Compute the physical space values (qMODES) by running the script
+        /src/qMODES_scripts/Calculate_qMODES.py and store the results in
+        /output_data/qMODES_data/
 
     At the moment the physical space and fourier space grid parameters 
     are hard coded into each of the scripts where they are relavent.
@@ -159,10 +180,10 @@ qMODES (A Global Moisture Decomposition Software Package)
     versions may appear here in later versions.
 
 
------------------------ VERSION HISTORY COMMENTS ----------------------    
+------------------------------- LISCENSE ------------------------------    
 
-    Liscense information is contained within the base directory in a 
-    file titled LISCENSE.md
+    The liscense for the qMODES software package is a standard Creative Commons 1.0 Liscense. For more information see the file titled 
+    LISCENSE.md in the base directory.
 
 
 ----------------------------- CONTRIBUTORS ----------------------------
