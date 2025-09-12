@@ -196,14 +196,13 @@ qMODES (A Global Moisture Decomposition Software Package)
     University of Wisconsin - Madison
     stechmann at wisc dot edu
 
-    Valentino Neduhal, PhD by commit date???
-    University of Hamburg
-    valentino dot neduhal at uni-hamburg dot de
-
     Nedjeljka Zagar, PhD
     University of Hamburg
     nedjeljka dot zagar at uni-hamburg dot de
 
+    Valentino Neduhal
+    University of Hamburg
+    valentino dot neduhal at uni-hamburg dot de
 
 --------------------------- ACKNOWLEDGEMENTS --------------------------
 
