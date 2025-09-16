@@ -35,7 +35,8 @@ qMODES (A Global Moisture Decomposition Software Package)
     has been included in the base directory which describes the 
     dependencies of the qMODES software package.
 
-    An additional requirements.txt file is also included which contains the dependencies for running the 
+    An additional requirements.txt file is also included which contains 
+    the dependencies for running the 
 
 
 ------------------ qMODES SOFTWARE DIRECTORY OVERVIEW -----------------
@@ -182,7 +183,8 @@ qMODES (A Global Moisture Decomposition Software Package)
 
 ------------------------------- LISCENSE ------------------------------    
 
-    The liscense for the qMODES software package is a standard Creative Commons 1.0 Liscense. For more information see the file titled 
+    The liscense for the qMODES software package is a standard Creative
+    Commons 1.0 Liscense. For more information see the file titled 
     LISCENSE.md in the base directory.
 
 
