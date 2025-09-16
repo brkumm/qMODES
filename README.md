@@ -17,7 +17,8 @@ qMODES (A Global Moisture Decomposition Software Package)
     (developed by the Zagar group at the University of Hamburg) as 
     inputs in order to perform the computation. For more information on 
     these data see https://cds.climate.copernicus.eu/datasets/reanalysis-era5-complete?tab=overview 
-    and here https://modes.cen.uni-hamburg.de/ .
+    and here https://modes.cen.uni-hamburg.de/ . Or see the paper for
+    references to the zenodo links for these data.
 
     Contained in this package are the scripts necessary to perform the 
     main qMODES computations as well as several scripts that may be 
