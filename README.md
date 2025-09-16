@@ -26,6 +26,10 @@ qMODES (A Global Moisture Decomposition Software Package)
     other sample scripts that may be useful in aquiring the necessary 
     input data.
 
+    Several aspects of this package may be updated in the future.
+    To check if there is an updated version of the qMODES software check
+    the GitHub repository https://github.com/brkumm/qMODES/ .
+
 
 ----------------------------- DEPENDENCIES ----------------------------
 
