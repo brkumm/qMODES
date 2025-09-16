@@ -26,7 +26,7 @@ qMODES (A Global Moisture Decomposition Software Package)
     input data.
 
 
---------------------- INSTALLATION & DEPENDENCIES ---------------------
+----------------------------- DEPENDENCIES ----------------------------
 
     This software package is largely written in python, and as such it 
     is recommended to use a python virtual environment (pyvenv) to 
