@@ -188,9 +188,9 @@ qMODES (A Global Moisture Decomposition Software Package)
 
 ------------------------------- LISCENSE ------------------------------    
 
-    The liscense for the qMODES software package is a standard Creative
-    Commons 1.0 Liscense. For more information see the file titled 
-    LISCENSE.md in the base directory.
+    The liscense for the qMODES software package is a standard 
+    Creative Commons 1.0 Liscense. For more information see the file 
+    titled LISCENSE.md in the base directory.
 
 
 ----------------------------- CONTRIBUTORS ----------------------------
