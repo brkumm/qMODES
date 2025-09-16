@@ -192,6 +192,10 @@ qMODES (A Global Moisture Decomposition Software Package)
     University of Wisconsin - Madison
     bkumm at wisc dot edu or brkumm at gmail dot com
 
+    Valentino Neduhal
+    University of Hamburg
+    valentino dot neduhal at uni-hamburg dot de
+
     Sam Stechmann, PhD
     University of Wisconsin - Madison
     stechmann at wisc dot edu
@@ -200,15 +204,14 @@ qMODES (A Global Moisture Decomposition Software Package)
     University of Hamburg
     nedjeljka dot zagar at uni-hamburg dot de
 
-    Valentino Neduhal
-    University of Hamburg
-    valentino dot neduhal at uni-hamburg dot de
-
 --------------------------- ACKNOWLEDGEMENTS --------------------------
 
     Zagar Group and specifically, Nedjeljka Zagar and Valentino Neduhal
+    For help obtaining the MODES software data which served as input to
+    our qMODES package, and help with understanding this data, and also
+    for their feedback and insights during this research project.
 
-    ECMWF for producing and distributing the ERA reanalysis data sets.
+    ECMWF for producing and distributing the ERA5 reanalysis data sets.
 
 
 
