@@ -43,7 +43,7 @@ file_list = get_qk_files_with_date_and_ktot(date, ktot)
 
 #print(check_qk_files_cover_ktot_range(file_list))
 
-cover_ktot_range = check_qk_files_cover_ktot_range(file_list, 4)
+cover_ktot_range = check_qk_files_cover_ktot_range(file_list)
 files_have_all_modes = check_qk_files_have_all_modes(file_list)
 
 if cover_ktot_range and files_have_all_modes:
