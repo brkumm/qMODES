@@ -31,7 +31,7 @@ from .sample_files import sample_hough_file
 
 # MAIN COMPUTATION OF qk VALUES
 
-def compute_qk(mode, date, k_lb, k_ub, author_name=None, author_email=None):
+def compute_qk(mode, date, k_lb, k_ub, ktot=nk, author_name=None, author_email=None):
     """
     Function that computes longitudnal fourier components for moisture 
     EIG, WIG, and ROT modes from global dry modal decomposition value 
@@ -157,5 +157,7 @@ def compute_qk(mode, date, k_lb, k_ub, author_name=None, author_email=None):
     
     ds.to_netcdf(outfile, mode='a')
     print(f"qk_{mode} data saved to:\n\t{outfile}")
+
+    return
 
 #--------------------------------------------------------------------------
