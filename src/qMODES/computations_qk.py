@@ -31,7 +31,7 @@ from .sample_files import sample_hough_file
 
 # MAIN COMPUTATION OF qk VALUES
 
-def compute_qk(mode, date, k_lb, k_ub, ktot=nk, author_name=None, author_email=None):
+def compute_qk(mode, date, k_lb, k_ub, ktot=None, author_name=None, author_email=None):
     """
     Function that computes longitudnal fourier components for moisture 
     EIG, WIG, and ROT modes from global dry modal decomposition value 
@@ -66,6 +66,8 @@ def compute_qk(mode, date, k_lb, k_ub, ktot=nk, author_name=None, author_email=N
         print("EXITING: --mode command line flag must be EIG, WIG, or BAL")
         exit()
 
+    if ktot == None:
+        ktot = nK
 
     #---------- Initial Calcs ----------
     outdir      = get_QMODES_QKDATA_DIR()

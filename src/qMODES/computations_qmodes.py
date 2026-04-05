@@ -17,9 +17,9 @@ import numpy    as np
 import xarray   as xa
 from   datetime import datetime
 
-from .read_environment_variables import get_QMODES_QKDATA_DIR, get_QMODES_QMODESDATA_DIR, template_qmodes_with_klb_kub_ktot_fname
+from .read_environment_variables import get_QMODES_QKDATA_DIR, get_QMODES_QMODESDATA_DIR
 from .parameters   import nK, nplev, nlat, nlon
-from .templates    import template_qk_fname, template_qmodes_fname
+from .templates    import template_qk_fname, template_qmodes_fname, template_qmodes_with_klb_kub_ktot_fname
 from .sample_files import sample_ERA_file
 
 #------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ from .sample_files import sample_ERA_file
 #--------------------------------------------------------------------------
 # MAIN COMPUTATION OF qmodes VALUES
 
-def compute_qmodes(mode, date, k_lb, k_ub, ktot=nk, author_name=None, author_email=None):
+def compute_qmodes(mode, date, k_lb, k_ub, ktot=None, author_name=None, author_email=None):
     """
     Function that computes the moisture modal values from the qk 
     (longitudnal Fourier components) that are stored in the corresponding 
@@ -59,10 +59,13 @@ def compute_qmodes(mode, date, k_lb, k_ub, ktot=nk, author_name=None, author_ema
     if mode not in ["EIG", "WIG", "BAL"]:
         print("EXITING: --mode command line flag must be EIG, WIG, or BAL")
         exit()
+    
+    if ktot == None:
+        ktot = nK
 
     #---------- Initial Variable Setup ----------
-    k_lb_str = "0"*(3-len(str(k_lb))) + str(k_lb)
-    k_ub_str = "0"*(3-len(str(k_ub))) + str(k_ub)
+    klb_str = "0"*(3-len(str(k_lb))) + str(k_lb)
+    kub_str = "0"*(3-len(str(k_ub))) + str(k_ub)
     ktot_str = "0"*(3-len(str(ktot)))   + str(ktot)
 
     kvals       = np.array( [i for i in range(k_lb, k_ub+1)] )
@@ -96,7 +99,7 @@ def compute_qmodes(mode, date, k_lb, k_ub, ktot=nk, author_name=None, author_ema
         for kk in kvals:
 
             # k=0 term in Fourier expansion
-            if kk = 0:
+            if kk == 0:
                 q_mode[:,:,ilon] += qk_mode[0,kk,:,:]
 
             # k!=0 terms
@@ -124,7 +127,7 @@ def compute_qmodes(mode, date, k_lb, k_ub, ktot=nk, author_name=None, author_ema
                            attrs     = attrs)
     
     
-    outfile += f"{get_QMODES_QMODESDATA_DIR()}/{template_qmodes_with_klb_kub_ktot_fname(date, klb_str, kub_str, ktot_str)}"
+    outfile = f"{get_QMODES_QMODESDATA_DIR()}/{template_qmodes_with_klb_kub_ktot_fname(date, klb_str, kub_str, ktot_str)}"
     
     
     ds.to_netcdf(outfile, mode='a')
