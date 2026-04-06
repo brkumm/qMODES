@@ -46,7 +46,7 @@ def get_klb_kub_ktot_from_qmodes_filename(filename):
 
 def get_qmodes_files_with_date_and_ktot(date, ktot):
     
-    pattern = f"{get_QMODES_MODES_DIR()}/{template_combine_qmodes_file_pattern(date, ktot)}"
+    pattern = f"{get_QMODES_QMODESDATA_DIR()}/{template_combine_qmodes_file_pattern(date, ktot)}"
 
     return glob.glob(pattern)
 
@@ -61,14 +61,15 @@ def check_qmodes_files_cover_ktot_range(file_list, ktot=nK):
         for ik in range(klb, kub+1):
             if ik in ktot_range: ktot_range.remove(ik)
             else:
-                print(f"ERROR: To combine qk files no files should overlap in k values or be greater than {ktot}.\n{ik} violates one of both of these.")
+                print(f"ERROR: To combine qmodes files no files should overlap in k values or be greater than {ktot}.\n{ik} violates one of both of these.")
     # if all values removed from ktot one time range is covered
     if not ktot_range: 
         return True
 
     else:
         print("ERROR: Not all k values are covered by the following files")
-        for fname in file_list: print(f"\tfname")
+        for filename in file_list: 
+            print(f"\t{filename}")
         return False
 
 def check_qmodes_files_have_all_modes(file_list):
@@ -88,7 +89,7 @@ def check_qmodes_files_have_all_modes(file_list):
             else:
 
                 if is_first_error:
-                    print("ERROR: The following errors were found while examining qk files")
+                    print("ERROR: The following errors were found while examining qmodes files")
                     is_first_error = False
 
                 print(f"\t{fname}: {var}  data variable found when data vars should only include qk_EIG, qk_WIG, or qk_BAL")
@@ -96,11 +97,12 @@ def check_qmodes_files_have_all_modes(file_list):
         if var_set:
 
             if is_first_error:
-                    print("ERROR: The following errors were found while examining qk files")
+                    print("ERROR: The following errors were found while examining qmodes files")
                     is_first_error = False
 
             print(f"\t{fname}: Doesn't have all necessary modes")
-        print("\n")
+
+    print("\n")
 
     if is_first_error: return True
     else: return False
@@ -111,12 +113,13 @@ def check_qmodes_files_have_all_modes(file_list):
 
 def combine_qmodes_files_from_list(file_list, output_filename):
     # initializing combined dataset to first file in file_list
-    file_ds = xa.open_dataset(file_list[0])
+    file_ds = xa.open_dataset(file_list[0]).drop_vars("k_mode")
     combined_ds = file_ds.copy(deep=True)
 
     # adding data from each of the remaining files to combined_ds
-    for fname in flie_list[1:]:
-        file_ds = xa.open_dataset(fname)
+    for fname in file_list[1:]:
+        file_ds = xa.open_dataset(fname).drop_vars("k_mode")
+
         combined_ds = combined_ds + file_ds
 
     combined_ds.to_netcdf(output_filename)

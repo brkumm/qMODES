@@ -110,7 +110,7 @@ def check_qk_files_have_all_modes(file_list):
 #----- Function to combine files -----
 
 def combine_qk_files_from_list(file_list, output_filename):
-    combined_ds = xa.open_mfdataset(file_list)
+    combined_ds = xa.open_mfdataset(file_list, combine="by_coords")
     combined_ds.to_netcdf(output_filename)
 
     print(f"Files combined and saved to:\n\t{output_filename}")

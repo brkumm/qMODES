@@ -8,8 +8,8 @@ from .computations_vsf_int import compute_vsf_int
 from .computations_qk import compute_qk
 from .computations_qmodes import compute_qmodes
 
-from .combine_qk import get_klb_kub_ktot_from_qk_filename, get_qk_files_with_date_and_ktot, check_qk_files_cover_ktot_range, check_qk_files_have_all_modes, combine_qk_files_from_list#from .combine_qmodes import 
-
+from .combine_qk import get_klb_kub_ktot_from_qk_filename, get_qk_files_with_date_and_ktot, check_qk_files_cover_ktot_range, check_qk_files_have_all_modes, combine_qk_files_from_list
+from .combine_qmodes import get_klb_kub_ktot_from_qmodes_filename, get_qmodes_files_with_date_and_ktot, check_qmodes_files_cover_ktot_range, check_qmodes_files_have_all_modes, combine_qmodes_files_from_list
 
 
 #-----------------------------------------------------------------------------

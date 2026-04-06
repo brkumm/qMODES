@@ -64,9 +64,9 @@ def compute_qmodes(mode, date, k_lb, k_ub, ktot=None, author_name=None, author_e
         ktot = nK
 
     #---------- Initial Variable Setup ----------
-    klb_str = "0"*(3-len(str(k_lb))) + str(k_lb)
-    kub_str = "0"*(3-len(str(k_ub))) + str(k_ub)
-    ktot_str = "0"*(3-len(str(ktot)))   + str(ktot)
+    klb_str = "0"*(3-len(str(k_lb)))  + str(k_lb)
+    kub_str = "0"*(3-len(str(k_ub)))  + str(k_ub)
+    ktot_str = "0"*(3-len(str(ktot))) + str(ktot)
 
     kvals       = np.array( [i for i in range(k_lb, k_ub+1)] )
     Mode_list   = ['EIG','WIG','BAL']
