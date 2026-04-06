@@ -9,7 +9,7 @@ import argparse
 
 #-----------------------------------------------------------------------------
 # READING COMMAND LINE ARGUMENTS WITH argparse
-parser = argparse.ArgumentParser(description='This script is used to generate pressure level contour plots for an event over a specific region (originally Madison WI )')
+parser = argparse.ArgumentParser(description='This script is used to calculate the qk values (zonal Fourier coefficients) for a given date mode for a specided range of k values.')
 parser.add_argument('-m','--mode', help='Mode to compute qk values for: [EIG, WIG, BAL] or ALL', required=True)
 parser.add_argument('-d','--date', help='Date to comput the qk values for', required=True)
 parser.add_argument('--klb',  help='Lower bound of k values', type=int, required=True)
