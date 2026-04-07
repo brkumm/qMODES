@@ -33,7 +33,15 @@ def _check_sample_file_functions(input_list):
 			# Printing the bad sample function name
 			print(f"\t{sample_func.__name__}")
 
-	if has_thrown_warning: print("You should check:\n\t1)That the all required environment variables are setup (see README.md).\n\t2) The environmen variable readers are setup correctly (read_environment_varialbes.py).\n\t3) Check that the sample filenames are correct (sample_files.py).\n")
+	if has_thrown_warning: 
+        print("You should check:")
+        print("\t1) That the all required environment variables are setup (see README.md).")
+        print("\t2) The environmen variable readers are setup correctly (read_environment_varialbes.py).")
+        print("\t3) Check that the sample filenames are correct (sample_files.py).\n")
+        print("NOTE: This may also happen if you have not yet downloaded the required data or perfromed")
+        print("the preliminary calculations (VSF function integration).")
+
+    return
 
 def _print_bkg_function_warning():
 	"""
