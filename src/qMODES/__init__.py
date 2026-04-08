@@ -15,70 +15,69 @@ from .combine_qmodes import get_klb_kub_ktot_from_qmodes_filename, get_qmodes_fi
 #-----------------------------------------------------------------------------
 # CUSTOM FUNCTIONS FOR qMODES IMPORTS
 def _check_sample_file_functions(input_list):
-	
-	import os
-
-	has_thrown_warning = False
-	
-	for sample_func in input_list:
     
-    	#Print warning if file doesn't exist
-		if not os.path.isfile(sample_func()):
+    import os
 
-			#line to print upon finding first missing sample file
-			if has_thrown_warning == False:
-				has_thrown_warning = True
-				print(f"\nWARNING: The following qMODES \'sample_file\' functions don't produce a file that exists.")
+    has_thrown_warning = False
+    
+    for sample_func in input_list:
+    
+        #Print warning if file doesn't exist
+        if not os.path.isfile(sample_func()):
 
-			# Printing the bad sample function name
-			print(f"\t{sample_func.__name__}")
+            #line to print upon finding first missing sample file
+            if has_thrown_warning == False:
+                has_thrown_warning = True
+                print(f"\nWARNING: The following qMODES \'sample_file\' functions don't produce a file that exists.")
 
-	if has_thrown_warning: 
+            # Printing the bad sample function name
+            print(f"\t{sample_func.__name__}")
+
+    if has_thrown_warning:
         print("You should check:")
         print("\t1) That the all required environment variables are setup (see README.md).")
         print("\t2) The environmen variable readers are setup correctly (read_environment_varialbes.py).")
         print("\t3) Check that the sample filenames are correct (sample_files.py).\n")
         print("NOTE: This may also happen if you have not yet downloaded the required data or perfromed")
         print("the preliminary calculations (VSF function integration).")
-
     return
 
 def _print_bkg_function_warning():
-	"""
-	Function that warns the user about qmodes and qk functions not 
-	accounting for the background function in the computation, and 
-	instructs them on where they can see an example on how to properly 
-	account for it.
-	"""
-	print("\nIMPORTANT NOTE FOR USING qMODES!!!"                                                  )
-	print("\tThe factor of the background moisture derivative is left out of " )
-	print("\tthe qk and qmodes computations to have extra flexibility in how"  )
-	print("\tto account for this term, latitude dependent vs indepent bkg "    )
-	print("\tetc... This factor needs to be accounted for before you will "    )
-	print("\tobtain correct moisture anomoly values. I recommend using the "   )
-	print("\tqMODES package data reader functions or at least looking at them" )
-	print("\tto see how this is done.\n"                                        )
+    """
+    Function that warns the user about qmodes and qk functions not 
+    accounting for the background function in the computation, and 
+    instructs them on where they can see an example on how to properly 
+    account for it.
+    """
+    print("\nIMPORTANT NOTE FOR USING qMODES!!!"                                                  )
+    print("\tThe factor of the background moisture derivative is left out of " )
+    print("\tthe qk and qmodes computations to have extra flexibility in how"  )
+    print("\tto account for this term, latitude dependent vs indepent bkg "    )
+    print("\tetc... This factor needs to be accounted for before you will "    )
+    print("\tobtain correct moisture anomoly values. I recommend using the "   )
+    print("\tqMODES package data reader functions or at least looking at them" )
+    print("\tto see how this is done.\n"                                        )
 
-	return
+    return
 
 def _check_read_environment_variables_functions(input_function_list):
 
-	import os
+    import os
 
-	has_thrown_warning = False
+    has_thrown_warning = False
 
-	for func in input_function_list:
+    for func in input_function_list:
 
-		if func() == None:
-			if has_thrown_warning == False:
-				has_thrown_warning = True
-				print(f"\nWARNING: The following qMODES \'read_environment_variables\' functions return None.")
+        if func() == None:
+            if has_thrown_warning == False:
+                has_thrown_warning = True
+                print(f"\nWARNING: The following qMODES \'read_environment_variables\' functions return None.")
 
-			print(f"\t{func.__name__}")
+            print(f"\t{func.__name__}")
 
-	if has_thrown_warning: print("Make sure to set all environment variables.\nSee README.md file for which environment variables need to be set.\n")
-	
-	return
+    if has_thrown_warning: print("Make sure to set all environment variables.\nSee README.md file for which environment variables need to be set.\n")
+    
+    return
 
 #-----------------------------------------------------------------------------
 
