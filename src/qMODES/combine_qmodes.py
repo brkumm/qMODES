@@ -12,14 +12,15 @@
 
 #-----------------------------------------------------------------------------
 # IMPORTS
-import xarray as xa
-import numpy as xp
-import glob
 import os
+import glob
+import xarray as xa
+import numpy as np
+from datetime import datetime
 
 from .read_environment_variables import get_QMODES_QMODESDATA_DIR
 from .templates import template_combine_qmodes_file_pattern
-from .parameters import nK
+from .parameters import nK, nplev, nlat, nlon
 #-----------------------------------------------------------------------------
 
 
@@ -111,21 +112,67 @@ def check_qmodes_files_have_all_modes(file_list):
 
 #----- Function to combine files -----
 
-def combine_qmodes_files_from_list(file_list, output_filename):
+def combine_qmodes_files_from_list(file_list, outfile):
     # initializing combined dataset to first file in file_list
-    file_ds = xa.open_dataset(file_list[0]).drop_vars("k_mode")
-    combined_ds = file_ds.copy(deep=True)
+    # Going to try writing one mode at a time to see how much memory is used
 
-    # adding data from each of the remaining files to combined_ds
-    for fname in file_list[1:]:
-        file_ds = xa.open_dataset(fname).drop_vars("k_mode")
+    modes_list = ["q_EIG", "q_WIG", "q_BAL"]
+    dtnow = datetime.now()
 
-        combined_ds = combined_ds + file_ds
+    ds = xa.open_dataset(file_list[0])
+    plev =  ds["plev"].values
+    lat  = ds["lat"].values
+    lon  = ds["lon"].values
 
-    combined_ds.to_netcdf(output_filename)
+    for mode in modes_list:
 
-    print(f"Files combined and saved to:\n\t{output_filename}")
+        print(f"computing data for {mode}")
+        q_mode_sum  = np.zeros((nplev, nlat, nlon))
 
+        for fname in file_list:
+            q_mode_sum += xa.open_dataset(fname)[mode].values
+        
+        # saving the data to the output file
+        # SAVING DATA TO NETCDF FILE
+    
+        coords    = {'plev'   : ( ['plev'], plev ),
+                     'lat'    : ( ['lat' ], lat  ),
+                     'lon'    : ( ['lon' ], lon  ) }
+    
+        data_vars = {f'q_{mode}' :([ 'plev', 'lat', 'lon'], q_mode_sum,
+                      { 'long_name':f'{mode} Part of q'}) }
+    
+        attrs     = {'creation_date':dtnow.strftime("%m/%d/%Y, %H:%M:%S")}
+    
+        ds        = xa.Dataset(data_vars = data_vars,
+                               coords    = coords,
+                               attrs     = attrs)
+        
+        ds.to_netcdf(outfile, mode='a')
+    
+    print(f"Data saved to:\n\t{outfile}")
+    
     return
+
+## First version of function. Requires too much memory for use in Dockerfile
+## Going to see if doing this in sections of the data works better 
+#def combine_qmodes_files_from_list(file_list, output_filename):
+#    # initializing combined dataset to first file in file_list
+#    file_ds = xa.open_dataset(file_list[0]).drop_vars("k_mode")
+#    combined_ds = file_ds.copy(deep=True)
+#
+#    # adding data from each of the remaining files to combined_ds
+#    for fname in file_list[1:]:
+#        file_ds = xa.open_dataset(fname).drop_vars("k_mode")
+#
+#        combined_ds = combined_ds + file_ds
+#
+#    combined_ds.to_netcdf(output_filename)
+#
+#    print(f"Files combined and saved to:\n\t{output_filename}")
+#
+#    return
+
+
 
 #-----------------------------------------------------------------------------
