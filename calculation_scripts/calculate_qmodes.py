@@ -2,18 +2,21 @@
 # IMPORTS
 from qMODES import compute_qmodes #compute_qk(mode, date, k_lb, k_ub, author_name=None, author_email=None)
 from qMODES import nK
+from qMODES import get_QMODES_SUPPRESS_NEW_USER_WARNINGS as suppress_warnings
+
 import argparse
 #-----------------------------------------------------------------------------
 
 
 #-----------------------------------------------------------------------------
-# PRINT WARING
+# PRINT WARNING(S)
 
-print("\nWARNING: When computing qmodes values in parallel they should be")
-print("batched in fairly large k-ranges. Each file will contain as much data")
-print("as the final file so computing too many will use a lot of memory.") 
-print("They should also be aggregated immediately after all parallel 
-print("computations are completed.\n")
+if suppress_warnings == False:
+    print("\nWARNING: When computing qmodes values in parallel they should be")
+    print("batched in fairly large k-ranges. Each file will contain as much data")
+    print("as the final file so computing too many will use a lot of memory.") 
+    print("They should also be aggregated immediately after all parallel") 
+    print("computations are completed.\n")
 #-----------------------------------------------------------------------------
 
 
