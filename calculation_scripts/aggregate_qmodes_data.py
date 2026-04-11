@@ -11,7 +11,6 @@ from qMODES import template_qmodes_fname
 #-----------------------------------------------------------------------------
 
 
-
 #-----------------------------------------------------------------------------
 # READING COMMAND LINE ARGUMENTS USING argparse
 parser = argparse.ArgumentParser(description='This script is used to aggregate qmodes datafiles that are from the same date but cover different k values.')
@@ -31,8 +30,8 @@ rm_old = args.rm_old
 #-----------------------------------------------------------------------------
 # MAIN 
 
-# Getting all files qk files in QMODES_QKDATA_DIR that have date and ktot
-# specified from argparse arguments.
+# Getting all qk files in QMODES_QKDATA_DIR that have date and ktot values
+# specified in argparse arguments.
 
 ktot_str = "0"*(3-len(str(ktot))) + str(ktot)
 combined_outfile = f"{get_QMODES_QMODESDATA_DIR()}/{template_qmodes_fname(date)}"
@@ -41,7 +40,7 @@ file_list = get_qmodes_files_with_date_and_ktot(date, ktot_str)
 
 # Check if file_list covers all of the k values
 
-cover_ktot_range     = check_qmodes_files_cover_ktot_range(file_list, 4) # 4 added for testing
+cover_ktot_range     = check_qmodes_files_cover_ktot_range(file_list)
 files_have_all_modes = check_qmodes_files_have_all_modes(file_list)
 
 if cover_ktot_range and files_have_all_modes:

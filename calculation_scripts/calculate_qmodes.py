@@ -6,6 +6,17 @@ import argparse
 #-----------------------------------------------------------------------------
 
 
+#-----------------------------------------------------------------------------
+# PRINT WARING
+
+print("\nWARNING: When computing qmodes values in parallel they should be")
+print("batched in fairly large k-ranges. Each file will contain as much data")
+print("as the final file so computing too many will use a lot of memory.") 
+print("They should also be aggregated immediately after all parallel 
+print("computations are completed.\n")
+#-----------------------------------------------------------------------------
+
+
 
 #-----------------------------------------------------------------------------
 # READING COMMAND LINE ARGUMENTS WITH argparse
