@@ -227,7 +227,3 @@ qMODES (A Global Moisture Decomposition Software Package)
     for their feedback and insights during this research project.
 
     ECMWF for producing and distributing the ERA5 reanalysis data sets.
-
-
-
-
