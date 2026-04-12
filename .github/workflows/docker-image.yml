@@ -19,5 +19,5 @@ jobs:
       run: docker build . --file Dockerfile --tag brkumm92/qmodes:latest
     - name: Push the Docker Image
       run: 
-        docker login -u brkumm92 -p ${{ secrets.DOCKER_HUB_TOKEN s}}
+        docker login -u brkumm92 -p ${{ secrets.DOCKER_HUB_TOKEN }}
         docker push brkumm92/qmodes:latest
