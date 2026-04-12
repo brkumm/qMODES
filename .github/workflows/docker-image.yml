@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag brkumm92/qmodes:latest
+    - name: Push the Docker Image
+      run: 
+        docker login -u brkumm92 -p ${{ secrets.DOCKER_HUB_TOKEN s}}
+        docker push brkumm92/qmodes:latest
