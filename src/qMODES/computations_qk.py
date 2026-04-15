@@ -1,9 +1,9 @@
 #-----------------------------------------------------------------------------
 # File:          computations_qk.py
-# Author:        Bradley Kumm (brkumm@gmail.com
-# Last Modified: 2026/01/12 (YYYY/MM/DD)
-# Description:   Functions used to compute the qk values, meridional Fourier
-#                components. See Kumm et al. 2026 (currently in review) paper
+# Author:        Bradley Kumm (brkumm@gmail.com)
+# Last Modified: 2026/04/15 (YYYY/MM/DD)
+# Description:   Functions used to compute the qk (meridional Fourier
+#                component) values. See Kumm et al. 2026 (currently in review) paper
 #                for equations relavent to the computations.
 #
 # Notes:         

@@ -1,8 +1,8 @@
 #-----------------------------------------------------------------------------
 # File:          combine_qk.py
-# Author:        Bradley Kumm (brkumm@gmail.com
-# Last Modified: 2026/04/03 (YYYY/MM/DD)
-# Description:   Functions used to agrogate the qk values. 
+# Author:        Bradley Kumm (brkumm@gmail.com)
+# Last Modified: 2026/04/15 (YYYY/MM/DD)
+# Description:   Functions used to agrogate the qmodes files. 
 #
 # Notes:         
 #               

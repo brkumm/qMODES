@@ -1,8 +1,9 @@
 #-----------------------------------------------------------------------------
 # File:          computations_qmodes.py
 # Author:        Bradley Kumm (brkumm@gmail.com)
-# Last Modified: 2026/04/04 (YYYY/MM/DD)
-# Description:   Main function used to compute the modal moisture values
+# Last Modified: 2026/04/15 (YYYY/MM/DD)
+# Description:   Main function used to compute the EIG, WIG, BAL/ROT and M 
+#                modal moisture values.
 #
 # Notes:         
 #               

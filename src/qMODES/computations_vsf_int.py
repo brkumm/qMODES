@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------------
 # File:          computations_vsf_int.py
-# Author:        Bradley Kumm (brkumm@gmail.com
-# Last Modified: 2026/01/12 (YYYY/MM/DD)
+# Author:        Bradley Kumm (brkumm@gmail.com)
+# Last Modified: 2026/04/15 (YYYY/MM/DD)
 # Description:   Various functions used to compute the integrated Vertical
 #                Structure Function (VSF) values from an input VSF data file.
 #
