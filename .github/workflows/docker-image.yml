@@ -2,38 +2,49 @@ name: Build and Push Docker Image
 
 on:
   push:
-    # This ensures the workflow only runs when a tag is pushed
+    # This filter ensures the workflow only runs when a tag 
+    # matching 'v*' (like v1.0.0) is pushed.
     tags:
-      - 'v*' # Triggers on tags starting with 'v' (e.g., v1.0.1)
+      - 'v*.*.*'
+    branches:
+      - main
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
+        # You will need to add DOCKER_USERNAME and DOCKER_PASSWORD 
+        # to your GitHub Repository Secrets.
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Extract Metadata (tags, labels)
+      - name: Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/your-repo-name
-          # This automatically formats the tag for Docker
+          images: ${{ secrets.DOCKER_HUB_USERNAME }}/your-repo-name
+          # This automatically handles the semver extraction
           tags: |
+            # Tag with the full SemVer version (e.g. 1.2.3)
             type=semver,pattern={{version}}
-            type=sha
+            # Tag with major.minor (e.g. 1.2)
+            type=semver,pattern={{major}}.{{minor}}
+            # Tag with major only (e.g. 1)
+            type=semver,pattern={{major}}
+            # Always tag latest for the newest release
+            type=raw,value=latest,enable=${{ github.ref_type == 'tag' }}
 
-      - name: Build and Push Image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
+          # This uses the output from the 'meta' step above
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
