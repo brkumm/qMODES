@@ -6,8 +6,6 @@ on:
     # matching 'v*' (like v1.0.0) is pushed.
     tags:
       - 'v*.*.*'
-    branches:
-      - main
 
 jobs:
   build-and-push:
@@ -28,7 +26,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_HUB_USERNAME }}/your-repo-name
+          images: ${{ secrets.DOCKER_HUB_USERNAME }}/qmodes
           # This automatically handles the semver extraction
           tags: |
             # Tag with the full SemVer version (e.g. 1.2.3)
