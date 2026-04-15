@@ -13,16 +13,13 @@
 
 #------------------------------------------------------------------------------
 # IMPORTS
-
-
-import numpy    as np
-import xarray   as xa
-from   datetime import datetime
-
 from .read_environment_variables import get_QMODES_VSF_DIR, get_QMODES_VSFINT_DIR
 from .parameters   import nM, ps0
 from .templates    import template_vsf_fname, template_vsf_int_fname
 
+import numpy    as np
+import xarray   as xa
+from   datetime import datetime
 #------------------------------------------------------------------------------
 
 
@@ -65,7 +62,6 @@ def compute_vsf_int(out_dir=None, author_name=None, author_email=None):
     mp         = len(vgrid)
 
     vsfint_temp = np.zeros([nM,mp+1]) #Allocation of matrix that will contain all integrals for all vertical modes
-
 
     #------------------------------- Main Loop -------------------------------
 

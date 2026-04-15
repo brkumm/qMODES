@@ -12,14 +12,14 @@
 
 #-----------------------------------------------------------------------------
 # IMPORTS
+from .read_environment_variables import get_QMODES_QKDATA_DIR
+from .templates import template_combine_qk_file_pattern
+from .parameters import nK
+
 import xarray as xa
 import numpy as xp
 import glob
 import os
-
-from .read_environment_variables import get_QMODES_QKDATA_DIR
-from .templates import template_combine_qk_file_pattern
-from .parameters import nK
 #-----------------------------------------------------------------------------
 
 

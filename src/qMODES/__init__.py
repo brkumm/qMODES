@@ -49,6 +49,7 @@ def _print_bkg_function_warning():
     instructs them on where they can see an example on how to properly 
     account for it.
     """
+
     print("\nIMPORTANT NOTE FOR USING qMODES!!!"                                                  )
     print("\tThe factor of the background moisture derivative is left out of " )
     print("\tthe qk and qmodes computations to have extra flexibility in how"  )
@@ -108,7 +109,5 @@ _check_sample_file_functions(sample_file_input_list)
 
 # Print important warnings
 if get_QMODES_SUPPRESS_NEW_USER_WARNINGS == False: _print_bkg_function_warning()
-
-# Check if vsf_int file exists and send warning if it doesn't
 
 #-----------------------------------------------------------------------------

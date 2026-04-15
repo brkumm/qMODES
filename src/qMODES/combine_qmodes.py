@@ -12,15 +12,15 @@
 
 #-----------------------------------------------------------------------------
 # IMPORTS
+from .read_environment_variables import get_QMODES_QMODESDATA_DIR
+from .templates import template_combine_qmodes_file_pattern
+from .parameters import nK, nplev, nlat, nlon
+
 import os
 import glob
 import xarray as xa
 import numpy as np
 from datetime import datetime
-
-from .read_environment_variables import get_QMODES_QMODESDATA_DIR
-from .templates import template_combine_qmodes_file_pattern
-from .parameters import nK, nplev, nlat, nlon
 #-----------------------------------------------------------------------------
 
 
@@ -153,26 +153,5 @@ def combine_qmodes_files_from_list(file_list, outfile):
     print(f"Data saved to:\n\t{outfile}")
     
     return
-
-## First version of function. Requires too much memory for use in Dockerfile
-## Going to see if doing this in sections of the data works better 
-#def combine_qmodes_files_from_list(file_list, output_filename):
-#    # initializing combined dataset to first file in file_list
-#    file_ds = xa.open_dataset(file_list[0]).drop_vars("k_mode")
-#    combined_ds = file_ds.copy(deep=True)
-#
-#    # adding data from each of the remaining files to combined_ds
-#    for fname in file_list[1:]:
-#        file_ds = xa.open_dataset(fname).drop_vars("k_mode")
-#
-#        combined_ds = combined_ds + file_ds
-#
-#    combined_ds.to_netcdf(output_filename)
-#
-#    print(f"Files combined and saved to:\n\t{output_filename}")
-#
-#    return
-
-
 
 #-----------------------------------------------------------------------------

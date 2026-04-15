@@ -13,16 +13,14 @@
 
 #------------------------------------------------------------------------------
 # IMPORTS
-
-import numpy    as np
-import xarray   as xa
-from   datetime import datetime
-
 from .read_environment_variables import get_QMODES_QKDATA_DIR, get_QMODES_QMODESDATA_DIR
 from .parameters   import nK, nplev, nlat, nlon
 from .templates    import template_qk_fname, template_qmodes_fname, template_qmodes_with_klb_kub_ktot_fname
 from .sample_files import sample_ERA_file
 
+import numpy    as np
+import xarray   as xa
+from   datetime import datetime
 #------------------------------------------------------------------------------
 
 
