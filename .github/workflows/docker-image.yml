@@ -5,6 +5,8 @@ on:
     # This ensures the workflow only runs when a tag is pushed
     tags:
       - 'v*' # Triggers on tags starting with 'v' (e.g., v1.0.1)
+    branches:
+      - main
 
 jobs:
   build-and-push:
