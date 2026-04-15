@@ -12,9 +12,14 @@ qMODES (A Global Moisture Decomposition Software Package)
     titled "Moisture decomposition with normal modes in global data: 
     balanced and unbalanced components" by Kumm, Stechmann, Zagar, and
     Neduhal. This package was developed in support of the work 
-    performed in said paper, and includes the scripts necessary to 
-    compute both the physical space and Fourier space q components 
-    outlined therein.
+    performed in said paper, and includes the Python package and scripts
+    necessary to compute both the physical space and Fourier space q 
+    components outlined therein as well as some of the scripts used to 
+    analyze and plot the data. 
+    
+    If you are not looking to modify the code at all it is recommended
+    to use the docker image associated with this repository. DIRECTIONS
+    FOR USING THE DOCKER IMAGE WILL SOON BE ADDED TO THIS README.
 
     This software package is designed to take ERA5 global reanalysis 
     data and modal decomposition data from the MODES software package 
@@ -24,7 +29,7 @@ qMODES (A Global Moisture Decomposition Software Package)
     and here https://modes.cen.uni-hamburg.de/ . Or see the paper for
     references to the zenodo links for these data.
 
-    Contained in this package are the scripts necessary to perform the 
+    Contained in this repository are the scripts necessary to perform the 
     main qMODES computations as well as several scripts that may be 
     useful for data analysis and visualization. There are also several
     other sample scripts that may be useful in aquiring the necessary 
@@ -36,8 +41,71 @@ qMODES (A Global Moisture Decomposition Software Package)
     TO REFLECT THESE CHANGES.
 
 
------------------------------ DEPENDENCIES ----------------------------
+----------------------------- DOCKER IMAGE ----------------------------
 
+    It is recommended to use the qMODES Docker image if you are not 
+    planning on making any major changes to the code. 
+
+    The qmodes docker images can be found here:
+
+    https://hub.docker.com/repository/docker/brkumm92/qmodes/
+
+    The qmodes image is setup to import everything in the GitHub repo.
+    Note that the GitHub repo doesn't contain any of the input data 
+    necessary to run the code. Therefore the code should be run by 
+    mounting two volumes when running a qmodes container. The default 
+    directory structure is assumed to have the following structure.
+
+    
+    |-- /qMODES
+    |    |
+    |    |-- /calculation_scripts
+    |    |    |- ... 
+    |    |
+    |    |-- /misc
+    |    |    |- ... 
+    |    |
+    |    |-- /src
+    |    |    | - /qMODES
+    |    |         |- ...
+    |    |
+    |    |-- /tests
+    |    |    |- ...
+    |
+    |-- /input_data
+    |    |
+    |    |- /ERA_data
+    |    |   |- ...
+    |    |
+    |    |- /MODES_data
+    |    |   |- /coef
+    |    |   |   |- ...
+    |    |   |
+    |    |   |- /hough
+    |    |   |   |- ...
+    |    |   |
+    |    |   |- /vsf
+    |    |   |   |- ...
+    |       
+    |-- /output_data
+    |    |
+    |    |-- /plots
+    |    |    |- ...
+    |    |
+    |    |-- /qk_data
+    |    |    |- ...
+    |    |
+    |    |-- /qmodes_data
+    |    |    |- ...
+
+    Note: The file structure can be changed if you would like to, 
+    however you will also need to change the file structure environment
+    variables as the qMODES Python package is to read in these variables
+    throughout the code.
+
+
+----------------------------- DEPENDENCIES ----------------------------
+    
     This software package is largely written in python, and as such it 
     is recommended to use a python virtual environment (pyvenv) to 
     handle all of the dependencies for running the qMODES software. A 
