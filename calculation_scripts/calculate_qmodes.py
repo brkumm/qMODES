@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------------
 # IMPORTS
-from qMODES import compute_qmodes #compute_qk(mode, date, k_lb, k_ub, author_name=None, author_email=None)
+from qMODES import compute_qmodes
 from qMODES import nK
 from qMODES import get_QMODES_SUPPRESS_NEW_USER_WARNINGS as suppress_warnings
 

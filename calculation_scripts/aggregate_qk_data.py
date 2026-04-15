@@ -1,13 +1,13 @@
 #-----------------------------------------------------------------------------
 # IMPORTS
-import argparse
-import xarray as xa
 from qMODES import get_QMODES_QKDATA_DIR
 from qMODES import nK
 from qMODES import get_klb_kub_ktot_from_qk_filename, get_qk_files_with_date_and_ktot
 from qMODES import check_qk_files_have_all_modes, check_qk_files_cover_ktot_range, combine_qk_files_from_list
 from qMODES import template_qk_fname
 
+import argparse
+import xarray as xa
 #-----------------------------------------------------------------------------
 
 

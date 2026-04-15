@@ -1,7 +1,8 @@
 #-----------------------------------------------------------------------------
 # IMPORTS
-from qMODES import compute_qk #compute_qk(mode, date, k_lb, k_ub, author_name=None, author_email=None)
+from qMODES import compute_qk
 from qMODES import nK
+
 import argparse
 #-----------------------------------------------------------------------------
 
@@ -9,7 +10,7 @@ import argparse
 
 #-----------------------------------------------------------------------------
 # READING COMMAND LINE ARGUMENTS WITH argparse
-parser = argparse.ArgumentParser(description='This script is used to calculate the qk values (zonal Fourier coefficients) for a given date mode for a specided range of k values.')
+parser = argparse.ArgumentParser(description='This script is used to calculate the qk (zonal Fourier coefficients) values for a given date mode for a specided range of k values.')
 parser.add_argument('-m','--mode', help='Mode to compute qk values for: [EIG, WIG, BAL] or ALL', required=True)
 parser.add_argument('-d','--date', help='Date to comput the qk values for', required=True)
 parser.add_argument('--klb',  help='Lower bound of k values', type=int, required=True)
