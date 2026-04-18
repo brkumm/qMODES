@@ -24,6 +24,11 @@ import numpy as np
 #-------------------------------------------------------------------------
 # DATA READING FUNCTIONS
 
+def read_ERA_grid_data(datafile,var1,var2,var3):
+    '''reads in ERA grid data and outputs the data as a list with the grid parameters in specified order'''
+    ERA_ds = xa.open_dataset(datafile)
+    return [ ERA_ds[var1].values, ERA_ds[var2].values, ERA_ds[var3].values ]
+
 def get_full_field_ERA_and_flipped_qmodes_data(ERA_datafile, MODES_datafile):
 	"""
 	This functions reads in and computes relavent q and qmodes data. 

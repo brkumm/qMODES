@@ -139,7 +139,7 @@ def combine_qmodes_files_from_list(file_list, outfile):
                      'lat'    : ( ['lat' ], lat  ),
                      'lon'    : ( ['lon' ], lon  ) }
     
-        data_vars = {f'q_{mode}' :([ 'plev', 'lat', 'lon'], q_mode_sum,
+        data_vars = {f'{mode}' :([ 'plev', 'lat', 'lon'], q_mode_sum,
                       { 'long_name':f'{mode} Part of q'}) }
     
         attrs     = {'creation_date':dtnow.strftime("%m/%d/%Y, %H:%M:%S")}

@@ -10,7 +10,7 @@ from .computations_qmodes import compute_qmodes
 
 from .combine_qk import get_klb_kub_ktot_from_qk_filename, get_qk_files_with_date_and_ktot, check_qk_files_cover_ktot_range, check_qk_files_have_all_modes, combine_qk_files_from_list
 from .combine_qmodes import get_klb_kub_ktot_from_qmodes_filename, get_qmodes_files_with_date_and_ktot, check_qmodes_files_cover_ktot_range, check_qmodes_files_have_all_modes, combine_qmodes_files_from_list
-
+from .data_readers import get_full_field_ERA_and_flipped_qmodes_data, get_full_field_ERA_and_flipped_qmodes_data_with_p_and_lat_dependent_background, get_single_plev_ERA_and_flipped_qmodes_data, get_single_plev_ERA_and_flipped_qmodes_data_with_p_and_lat_dependent_background, read_ERA_grid_data
 
 #-----------------------------------------------------------------------------
 # CUSTOM FUNCTIONS FOR qMODES IMPORTS
