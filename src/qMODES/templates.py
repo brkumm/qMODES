@@ -49,6 +49,9 @@ def template_qmodes_with_klb_kub_ktot_fname(date, klb_str, kub_str, ktot_str):
 def template_ERA_fname(date):
 	return f"ERA5_{date}_q-t_pl_data.nc"
 
+def template_ERA_uv_fname(date):
+	return f"ERA5_{date}_u-v_pl_data.nc"
+
 def template_combine_qk_file_pattern(date, ktot_str):
     return f"qk_{date}0000000_klb-*_kub-*_ktot-{ktot_str}.nc"
 

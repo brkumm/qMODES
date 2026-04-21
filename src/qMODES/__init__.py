@@ -1,7 +1,7 @@
 from .read_environment_variables import get_QMODES_ERA_DIR, get_QMODES_MODES_DIR, get_QMODES_COEF_DIR, get_QMODES_VSF_DIR, get_QMODES_VSFINT_DIR, get_QMODES_COEF_DIR, get_QMODES_QKDATA_DIR, get_QMODES_QMODESDATA_DIR, get_QMODES_PLOTS_DIR, get_QMODES_SUPPRESS_NEW_USER_WARNINGS
 from .sample_files import sample_vsf_file, sample_vsf_int_file, sample_coef_file, sample_hough_file, sample_freq_file, sample_ERA_file
 from .parameters import nK, nM, nN, nplev, nlat, nlon, ps0, Omega
-from .templates import template_vsf_fname, template_vsf_int_fname, template_hough_fname, template_coef_fname, template_freq_fname, template_qk_fname, template_qmodes_fname, template_ERA_fname, template_qk_with_klb_kub_ktot_fname, template_qmodes_with_klb_kub_ktot_fname, template_combine_qk_file_pattern, template_combine_qmodes_file_pattern
+from .templates import template_ERA_uv_fname, template_vsf_fname, template_vsf_int_fname, template_hough_fname, template_coef_fname, template_freq_fname, template_qk_fname, template_qmodes_fname, template_ERA_fname, template_qk_with_klb_kub_ktot_fname, template_qmodes_with_klb_kub_ktot_fname, template_combine_qk_file_pattern, template_combine_qmodes_file_pattern
 from .math_util import qMODES_deriv, qMODES_deriv_at_point
 
 from .computations_vsf_int import compute_vsf_int
