@@ -95,7 +95,6 @@ for blon in bad_lon_indicies:
 	qROT[:, blon] = ( qROT[:, blon + 1] + qROT[:, blon - 1] ) / 2.0
 	qM[:, blon]   = (   qM[:, blon + 1] +   qM[:, blon - 1] ) / 2.0
 
-
 #Changing units to g/kg and adding IG modes
 qERA = 1000.0 * qERA
 qROT = 1000.0 * qROT
