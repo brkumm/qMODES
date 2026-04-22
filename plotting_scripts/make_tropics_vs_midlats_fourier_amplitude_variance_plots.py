@@ -81,6 +81,21 @@ print(f"\tMidlatS: {lat[MidlatS_indicies[0]]} -- {lat[MidlatS_indicies[1]]}")
 
 [qERA, qEIG, qWIG, qROT, qM] = get_single_plev_ERA_and_flipped_qmodes_data_with_p_and_lat_dependent_background(ERA_datafile, qMODES_datafile, iplev)
 
+# Replacing bad datapoints
+bad_lon_indicies = np.array([0]) # WARNING!! Possible indexing issues. List of points to replace	
+
+for blon in bad_lon_indicies:
+
+	print(f"WARNING: REPLACING BAD DATA POINTS!!!")
+
+	#replacing bad lon values with average of two previous points at the same latitude
+	qERA[:, blon] = ( qERA[:, blon + 1] + qERA[:, blon - 1] ) / 2.0
+	qEIG[:, blon] = ( qEIG[:, blon + 1] + qEIG[:, blon - 1] ) / 2.0
+	qWIG[:, blon] = ( qWIG[:, blon + 1] + qWIG[:, blon - 1] ) / 2.0
+	qROT[:, blon] = ( qROT[:, blon + 1] + qROT[:, blon - 1] ) / 2.0
+	qM[:, blon]   = (   qM[:, blon + 1] +   qM[:, blon - 1] ) / 2.0
+
+
 #Changing units to g/kg and adding IG modes
 qERA = 1000.0 * qERA
 qROT = 1000.0 * qROT
@@ -89,7 +104,6 @@ qWIG = 1000.0 * qWIG
 qM   = 1000.0 * qM
 
 qIG  = qEIG + qWIG
-
 #-------------------------------------------------------------------------
 
 
