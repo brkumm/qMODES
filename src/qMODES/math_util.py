@@ -64,6 +64,9 @@ def qMODES_deriv_at_point(points_list,xval):
     y2 = float( points_list[1][1] ) 
     y3 = float( points_list[2][1] ) 
 
+    if len(set(x1,x2,x3)) != 3:
+        raise ZeroDivisionError("Repeated x-values causes ZeroDivisionError")
+
     a = ( x1 * ( y3 - y2) + x2 * (y1 - y3) + x3 * (y2 - y1) ) / ((x1 - x2)*(x1 - x3)*(x2 - x3))
     b = (y2 - y1) / (x2 - x1)  - a * (x1 + x2)
     #c coefficient doesn't matter after taking deriv 
