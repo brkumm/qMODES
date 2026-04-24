@@ -21,6 +21,7 @@
 #--------------------------------------------------------------------------
 # IMPORTS
 from .read_environment_variables import *
+from .templates import * 
 #--------------------------------------------------------------------------
 
 
@@ -30,21 +31,21 @@ from .read_environment_variables import *
 # projects file structure
 
 def sample_vsf_file():
-	return get_QMODES_VSF_DIR() + "/vsf.data.nc"
+	return f"{get_QMODES_VSF_DIR()}/{template_vsf_fname()}"
 
 def sample_vsf_int_file():
-	return get_QMODES_VSFINT_DIR() + "/vsf_int.data.nc"
+	return f"{get_QMODES_VSFINT_DIR()}/{template_vsf_int_fname()}"
 
 def sample_coef_file():
-	return get_QMODES_COEF_DIR() + "/Hough_coeff_M60_F320_201808010000000.nc"
+	return f"{get_QMODES_COEF_DIR()}/{template_coef_fname("20180801")}"
 
 def sample_hough_file():
-	return get_QMODES_HOUGH_DIR() + "/hough_F320_M60.wn00000.nc"
+	return f"{get_QMODES_HOUGH_DIR()}/{template_hough_fname("000")}"
 
 def sample_freq_file():
-	return get_QMODES_FREQ_DIR() + "/freq_F320_M60.data.wn00000"
+	return f"{get_QMODES_FREQ_DIR()}/{template_freq_fname("000")}"
 
 def sample_ERA_file():
-	return get_QMODES_ERA_DIR() + "/ERA5_20180801_q-t_pl_data.nc"
+	return f"{get_QMODES_ERA_DIR()}/{template_ERA_fname("20180801")}"
 
 #--------------------------------------------------------------------------

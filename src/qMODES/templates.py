@@ -32,7 +32,7 @@ def template_coef_fname(date):
 	return f"Hough_coeff_M60_F320_{date}0000000.nc"
 
 def template_freq_fname(k_str):
-	return f"freq_F320_{k_str}0000000.nc"
+	return f"freq_F320_M60.data.wn00{k_str}"
 
 def template_qk_fname(date):
 	return f"qk_{date}0000000.nc"
