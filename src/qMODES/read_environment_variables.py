@@ -57,6 +57,12 @@ def get_QMODES_QMODESDATA_DIR():
 def get_QMODES_PLOTS_DIR():
 	return os.getenv("QMODES_PLOTS_DIR")
 
+def get_QMODES_TEST_DIR():
+	return os.getenv("QMODES_TEST_DIR")
+
+def get_QMODES_TESTDATA_DIR():
+	return os.getenv("QMODES_TESTDATA_DIR")
+
 def get_QMODES_SUPPRESS_NEW_USER_WARNINGS():
     if os.getenv("QMODES_SUPPRESS_NEW_USER_WARNINGS") == "True":
         return True
