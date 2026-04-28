@@ -36,3 +36,24 @@ ps0 = 101325 # Pressure at bottom of the atmospheric grid
 Omega = 7.2722e-05 # Rotation rate of earth in rad / sec
 
 #--------------------------------------------------------------------------
+
+
+
+#--------------------------------------------------------------------------
+# PARAMETERS TO USE WHEN GENERATING AND RUNNING TESTS
+
+# Fourier Space Parameters 
+test_nK = 10 #number of test K modes
+test_nM = 3  #number of test M modes
+test_nN = 5 #number of test N modes
+
+# Atmospheric Grid Parameters
+test_nplev = 11  # number of test pressure levels on the grid
+test_nlat  = 180  # number of test latitude values on the grid
+test_nlon  = 360 # number of test longitude values on the grid
+
+# Physical Constants
+test_ps0 = 101325 # Pressure at bottom of the atmospheric grid
+test_Omega = 7.2722e-05 # Rotation rate of earth in rad / sec
+
+#--------------------------------------------------------------------------
