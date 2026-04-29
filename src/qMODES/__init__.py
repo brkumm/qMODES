@@ -2,7 +2,7 @@ from .read_environment_variables import get_QMODES_ERA_DIR, get_QMODES_MODES_DIR
 from .sample_files import sample_vsf_file, sample_vsf_int_file, sample_coef_file, sample_hough_file, sample_freq_file, sample_ERA_file
 from .parameters import nK, nM, nN, nplev, nlat, nlon, ps0, Omega
 from .parameters import test_nK, test_nM, test_nN, test_nplev, test_nlat, test_nlon, test_ps0, test_Omega
-from .templates import template_ERA_uv_fname, template_vsf_fname, template_vsf_int_fname, template_hough_fname, template_coef_fname, template_freq_fname, template_qk_fname, template_qmodes_fname, template_ERA_fname, template_qk_with_klb_kub_ktot_fname, template_qmodes_with_klb_kub_ktot_fname, template_combine_qk_file_pattern, template_combine_qmodes_file_pattern, template_testdata_vsf_fname, template_testdata_hough_fname, template_testdata_coef_fname
+from .templates import template_ERA_uv_fname, template_vsf_fname, template_vsf_int_fname, template_hough_fname, template_coef_fname, template_freq_fname, template_qk_fname, template_qmodes_fname, template_ERA_fname, template_qk_with_klb_kub_ktot_fname, template_qmodes_with_klb_kub_ktot_fname, template_combine_qk_file_pattern, template_combine_qmodes_file_pattern, template_testdata_vsf_fname, template_testdata_hough_fname, template_testdata_coef_fname, template_testdata_vsf_int_fname, template_testdata_qk_fname, template_testdata_qmodes_fname
 from .math_util import qMODES_deriv, qMODES_deriv_at_point
 
 from .computations_vsf_int import compute_vsf_int

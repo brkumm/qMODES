@@ -62,12 +62,21 @@ def template_ERA_uv_fname(date):
 
 # Test data filenames
 def template_testdata_vsf_fname():
-	return"testdata_vsf.nc"
+	return "testdata_vsf.nc"
 
 def template_testdata_hough_fname(k_str):
-	return"testdata_hough_{k_str}.nc"
+	return f"testdata_hough_{k_str}.nc"
 
 def template_testdata_coef_fname():
-	return"testdata_coef.nc"
+	return "testdata_coef.nc"
+
+def template_testdata_vsf_int_fname():
+	return "testdata_vsf_int.nc"
+
+def template_testdata_qk_fname():
+	return "testdata_qk.nc"
+
+def template_testdata_qmodes_fname():
+	return "testdata_qmodes.nc"
 
 #--------------------------------------------------------------------------
