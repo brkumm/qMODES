@@ -20,7 +20,8 @@
 
 #--------------------------------------------------------------------------
 # IMPORTS
-from .read_environment_variables import *
+from .get_environment_variables import *
+from .templates import *
 #--------------------------------------------------------------------------
 
 
