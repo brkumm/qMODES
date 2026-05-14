@@ -26,23 +26,23 @@
 def get_QMODES_ERA_DIR(env_var_input_data_dir: str) -> str:
 	return f"{env_var_input_data_dir}/ERA_data"
 
-def get_QMODES_VSF_DIR(env_var_input_data_dir: str) -> str:
-    return f"{env_var_input_data_dir}/vsf"
-
-def get_QMODES_VSFINT_DIR(env_var_input_data_dir: str) -> str:
-    return f"{env_var_input_data_dir}/vsf"
-
 def get_QMODES_MODES_DIR(env_var_input_data_dir: str) -> str:
 	return f"{env_var_input_data_dir}/MODES_data"
 
+def get_QMODES_VSF_DIR(env_var_input_data_dir: str) -> str:
+    return f"{env_var_input_data_dir}/MODES_data/vsf"
+
+def get_QMODES_VSFINT_DIR(env_var_input_data_dir: str) -> str:
+    return f"{env_var_input_data_dir}/MODES_data/vsf"
+
 def get_QMODES_COEF_DIR(env_var_input_data_dir: str) -> str:
-	return f"{env_var_input_data_dir}/coef"
+	return f"{env_var_input_data_dir}/MODES_data/coef"
 
 def get_QMODES_HOUGH_DIR(env_var_input_data_dir: str) -> str:
-	return f"{env_var_input_data_dir}/hough"
+	return f"{env_var_input_data_dir}/MODES_data/hough"
 
 def get_QMODES_FREQ_DIR(env_var_input_data_dir: str) -> str:
-	return f"{env_var_input_data_dir}/hough"
+	return f"{env_var_input_data_dir}/MODES_data/hough"
 
 
 # Output Data Directories
@@ -71,7 +71,7 @@ def get_QMODES_PLOTS_DIR(env_var_output_data_dir: str) -> str:
 
 
 # Input data filenames
-def template_ERA_fname(env_var_input_data_dir: str, date: str) -> str:
+def template_ERA_q_fname(env_var_input_data_dir: str, date: str) -> str:
 	return f"{get_QMODES_ERA_DIR(env_var_input_data_dir)}/ERA5_{date}_q-t_pl_data.nc"
 
 def template_ERA_uv_fname(env_var_input_data_dir: str, date:str) -> str:
