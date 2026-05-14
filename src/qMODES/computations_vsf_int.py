@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------------
 # File:          computations_vsf_int.py
 # Author:        Bradley Kumm (brkumm@gmail.com)
-# Last Modified: 2026/04/15 (YYYY/MM/DD)
+# Last Modified: 2026/05/14 (YYYY/MM/DD)
 # Description:   Various functions used to compute the integrated Vertical
 #                Structure Function (VSF) values from an input VSF data file.
 #
@@ -13,9 +13,10 @@
 
 #------------------------------------------------------------------------------
 # IMPORTS
-from .read_environment_variables import get_QMODES_VSF_DIR, get_QMODES_VSFINT_DIR
+#from .get_environment_variables import get_QMODES_VSF_DIR, get_QMODES_VSFINT_DIR
+from .get_environment_variables import get_qMODES_INPUT_DATA_DIR
 from .parameters   import nM, ps0
-from .templates    import template_vsf_fname, template_vsf_int_fname
+from .templates    import get_QMODES_VSF_DIR, get_QMODES_VSFINT_DIR, template_vsf_fname, template_vsf_int_fname
 
 import numpy    as np
 import xarray   as xa
@@ -27,7 +28,7 @@ from   datetime import datetime
 #------------------------------------------------------------------------------
 #MAIN COMPUTATION OF INTEGRATED VERTICAL STRUCTURE FUNCTION 
 
-def compute_vsf_int(out_dir=None, author_name=None, author_email=None):
+def compute_vsf_int(inputdata_dir: str = get_qMODES_INPUT_DATA_DIR(), author_name: str = None, author_email: str = None) -> None:
     """
     Function that computes the integrated vertical structure function (VSF)
     values, which are computed as:
@@ -48,21 +49,16 @@ def compute_vsf_int(out_dir=None, author_name=None, author_email=None):
 
     """
 
-    #-------------------- Setting Computation Parameters ---------------------
+    #-------------------- Setting Computation Parameters --------------------
+    vsf_infile  = template_vsf_fname(inputdata_dir)
+    output_file = template_vsf_int_fname(inputdata_dir)
 
-    vsf_dir = get_QMODES_VSF_DIR()
-    out_dir = get_QMODES_VSFINT_DIR()
-
-    outfile = f"{out_dir}/{template_vsf_int_fname()}"
-
-    vsf_infile = f"{vsf_dir}/{template_vsf_fname()}"
     vsf_ds     = xa.open_dataset(vsf_infile)
     vsf        = vsf_ds["vsf"].values
     vgrid      = vsf_ds["vgrid"].values
     mp         = len(vgrid)
 
     vsfint_temp = np.zeros([nM,mp+1]) #Allocation of matrix that will contain all integrals for all vertical modes
-
     #------------------------------- Main Loop -------------------------------
 
     dz = np.zeros(mp + 1)
@@ -82,7 +78,7 @@ def compute_vsf_int(out_dir=None, author_name=None, author_email=None):
     vmodes  = np.array([i for i in range(nM)])
 
 
-    #-------------------- Saving vsf_int Values to Outfile -------------------
+    #-------------------- Saving vsf_int Values to output_file -------------------
 
     vgrid_int = vgrid[::-1] #ordering switches because integration is done from top of atmosphere to surface
     out_units = 'Pa'
@@ -105,8 +101,8 @@ def compute_vsf_int(out_dir=None, author_name=None, author_email=None):
                     coords = coords,
                     attrs = attrs)
     
-    ds.to_netcdf(outfile)
-    print(f"vsf_int computation sucessful!!\n\noutput data saved to:\n\t{outfile}")
+    ds.to_netcdf(output_file)
+    print(f"vsf_int computation sucessful!!\n\noutput data saved to:\n\t{output_file}")
 
     return
 
