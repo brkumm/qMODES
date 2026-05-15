@@ -3,38 +3,40 @@
 # Author:        Bradley Kumm (brkumm@gmail.com)
 # Last Modified: 2026/04/15 (YYYY/MM/DD)
 # Description:   Functions used to compute the qk (meridional Fourier
-#                component) values. See Kumm et al. 2026 (currently in review) paper
-#                for equations relavent to the computations.
+#                component) values. See Kumm et al. 2026 (currently in review)
+#                paper for equations relavent to the computations.
 #
 # Notes:         
 #               
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 
 
 #-----------------------------------------------------------------------------
 # IMPORTS
-from .read_environment_variables import get_QMODES_VSFINT_DIR, get_QMODES_COEF_DIR, get_QMODES_HOUGH_DIR, get_QMODES_QKDATA_DIR
+from .get_environment_variables import get_QMODES_INPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
 from .templates import template_vsf_int_fname, template_hough_fname, template_coef_fname, template_qk_with_klb_kub_ktot_fname
-from .parameters import nK, nM, nN, nlat, nplev
-from .sample_files import sample_hough_file
 
+import yaml
 import numpy as np
 import xarray as xa
-from   datetime import datetime
+from datetime import datetime
 #-----------------------------------------------------------------------------
 
 
 
 #-----------------------------------------------------------------------------
-
 # MAIN COMPUTATION OF qk VALUES
 
-def compute_qk(mode, date, k_lb, k_ub, ktot=None, author_name=None, author_email=None):
+def compute_qk(mode: str, date: str, k_lb: int, k_ub: int, ktot: int = None, 
+               input_data_dir: str = get_QMODES_INPUT_DATA_DIR(), 
+               output_data_dir: str = get_QMODES_INPUT_DATA_DIR(), 
+               parameter_file: str = get_QMODES_PARAMETERS_FILE(), 
+               author_name: str = None, author_email: str = None) -> None:
     """
     Function that computes longitudnal fourier components for moisture 
     EIG, WIG, and ROT modes from global dry modal decomposition value 
-    (coefficients, integrated VSF, and hough function values) 
+    (coefficients, integrated VSF, and hough function values).
 
 
     REQUIRED INPUTS:
@@ -45,8 +47,12 @@ def compute_qk(mode, date, k_lb, k_ub, ktot=None, author_name=None, author_email
         k_ub: k index upper bound (inclusive)
 
     OPTIONAL INPUTS:
-        author_name:  name of author (stored in outputfile metadata)
-        author_email: email of author (stored in outputfile metadata)
+        ktot: Total number of k-modes.
+        input_data_dir: qMODES input data dir.
+        output_data_dir: qMODES output data dir.
+        parameter_file: File where parameters are stored.
+        author_name: Name of author (stored in outputfile metadata)
+        author_email: Email of author (stored in outputfile metadata)
 
     IMPORTANT NOTE!!!
         The factor of the background moisture derivative is left out of 
@@ -58,94 +64,99 @@ def compute_qk(mode, date, k_lb, k_ub, ktot=None, author_name=None, author_email
         to see how this is done.  
 
     """
+    #---------- Parameters reading setup ----------
+    with open(parameter_file, 'r') as param_file:
+        params = yaml.safe_load(param_file)
 
     #---------- Input Checks ----------
 
     if mode not in ["EIG", "WIG", "BAL"]:
-        print("EXITING: --mode command line flag must be EIG, WIG, or BAL")
+        print("EXITING: 'mode' value must be EIG, WIG, or BAL")
         exit()
 
     if ktot == None:
-        ktot = nK
+        ktot = params['mode_parameters']['nK']
 
     #---------- Initial Calcs ----------
-    outdir      = get_QMODES_QKDATA_DIR()
-    vsf_int_dir = get_QMODES_VSFINT_DIR()
-    coef_dir    = get_QMODES_COEF_DIR()
-    hough_dir   = get_QMODES_HOUGH_DIR()
-
-    vsf_int_infile = f"{vsf_int_dir}/{template_vsf_int_fname()}"
-    coef_infile    = f"{coef_dir}/{template_coef_fname(date)}"
+    vsf_int_infile = template_vsf_int_fname(input_data_dir)
+    coef_infile    = template_coef_fname(input_data_dir, date)
 
     k_lb_str = "0"*(3-len(str(k_lb))) + str(k_lb)
     k_ub_str = "0"*(3-len(str(k_ub))) + str(k_ub)
-    ktot_str = "0"*(3-len(str(nK)))   + str(nK)
+    ktot_str = "0"*(3-len(str(ktot))) + str(ktot)
 
-    outfile = f"{outdir}/{template_qk_with_klb_kub_ktot_fname(date, k_lb_str, k_ub_str, ktot_str)}"
+    outfile = template_qk_with_klb_kub_ktot_fname(output_data_dir, date, 
+                                                  k_lb_str, k_ub_str, 
+                                                  ktot_str)
 
     kvals = [i for i in range(k_lb, k_ub+1)]
 
+    #---------- Reading in data that is constant over the loop ----------
+    # grid data
+    nplev = params['grid_parameters']['nplev']
+    nlat  = params['grid_parameters']['nlat']
 
-    #---------- Reading In Grid & Preliminary Data ----------
-    sample_hough_ds = xa.open_dataset(sample_hough_file())
-    lat             = sample_hough_ds["lat"].values
+    sample_gird_ds = xa.open_dataset(params['sample_files']['grid_file'])
+    lat = sample_gird_ds["lat"].values
 
-    # Reading in hough_coef data
+    # mode index data
+    nM = params['mode_parameters']['nM']
+    nN = params['mode_parameters']['nN']
+
+    # hough_coef data
     coef_ds = xa.open_dataset(coef_infile)
     coefs   = coef_ds[mode].values
     
-    # Reading in vsf_int data
+    # vsf_int data
     vsf_int_ds = xa.open_dataset(vsf_int_infile)
     vsf_int    = vsf_int_ds["vsf_int"].values
     vgrid_int  = vsf_int_ds["vgrid_int"].values
 
-
     #---------- Main Loop ----------
-    # initalize qk and hough
-    qk    = np.zeros((2, len(kvals), nplev, nlat))
-    hough = np.zeros((nM,3,nN,nlat))
+    # Initalize qk and hough
+    nReIm = 2 # number of indicies for Re+Im 
+    nHvec = 3 # number of indicies for Hough vector
 
-    
-    #initalizing values used in loop
+    qk    = np.zeros((nReIm, len(kvals), nplev, nlat))
+    hough = np.zeros((nM,nHvec,nN,nlat)) 
+
+    # Initalizing RE & IM components of inner sum
     RE_inner_sum = 0
     IM_inner_sum = 0
         
-    #Loop
-    for ik in range(len(kvals)):
-        kk = kvals[ik] #kk is the actual k value
+    # Main loop
+    for ik, kk in enumerate(kvals):
         
-        #read in Hough Function data
+        # Read in Hough Function data
         kstr         = "0"*(3-len(str(kk)))+str(kk)
-        hough_infile = f"{hough_dir}/{template_hough_fname(kstr)}"
+        hough_infile = template_hough_fname(input_data_dir, kstr)
         hough_ds     = xa.open_dataset(hough_infile)
         hough        = hough_ds[f"{mode}"].values
     
         for iplev in range(nplev):
-    
             for mm in range(nM):
                 
-                #re-initializing inner sums
+                # Reset inner sum values
                 RE_inner_sum = 0
                 IM_inner_sum = 0
     
-                #calculating the n portion of the sum (the "inner sum") 
+                # Calculating the "inner" (n index) portion of the sum 
                 for nn in range(nN):
-                    RE_inner_sum += coefs[0,0,kk,mm,nn] * hough[mm,2,:,nn] # [2,:,mm,nn] -- reordered indexing
-                    IM_inner_sum += coefs[0,1,kk,mm,nn] * hough[mm,2,:,nn] # [2,:,mm,nn] -- reordered indexing
+                    RE_inner_sum += coefs[0,0,kk,mm,nn] * hough[mm,2,:,nn]
+                    IM_inner_sum += coefs[0,1,kk,mm,nn] * hough[mm,2,:,nn]
     
                 qk[0,ik,iplev,:] +=  vsf_int[mm,iplev] * RE_inner_sum
                 qk[1,ik,iplev,:] +=  vsf_int[mm,iplev] * IM_inner_sum 
 
-    #---------- Saving Data to Outputfile ----------
-
+    #---------- Saving Data to outfile ----------
     dtnow = datetime.now()
 
-    coords    = {'k_mode'    : ( ['k_mode'    ], np.array(kvals) ),
-                 'vgrid_int' : ( ['vgrid_int' ], vgrid_int       ),
-                 'lat'       : ( ['lat'       ], lat             )  }
+    coords    = {'k_mode'    : ( ['k_mode'], np.array(kvals)),
+                 'vgrid_int' : ( ['vgrid_int'], vgrid_int),
+                 'lat'       : ( ['lat'], lat)  }
     
     data_vars = {f'qk_{mode}' :( ['Re+Im', 'k_mode', 'vgrid_int', 'lat'], qk,
-                                 {'long_name':f'{mode} Part of specific humidity'} )  }
+                 {'long_name':f'{mode} Part of specific humidity'}) }
     
     attrs     = {'creation_date':dtnow.strftime("%m/%d/%Y, %H:%M:%S")}
     
@@ -161,4 +172,4 @@ def compute_qk(mode, date, k_lb, k_ub, ktot=None, author_name=None, author_email
 
     return
 
-#--------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
