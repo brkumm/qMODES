@@ -23,16 +23,16 @@ import os
 # FUNCTIONS THAT READ IN ENV VARS
 
 # functions to retrieve directories
-def get_qMODES_INPUT_DATA_DIR() -> str:
+def get_QMODES_INPUT_DATA_DIR() -> str:
     return os.getenv("QMODES_INPUT_DATA_DIR")
 
-def get_qMODES_OUTPUT_DATA_DIR() -> str:
+def get_QMODES_OUTPUT_DATA_DIR() -> str:
     return os.getenv("QMODES_OUTPUT_DATA_DIR")
 
-def get_qMODES_TEST_INPUT_DATA_DIR() -> str:
+def get_QMODES_TEST_INPUT_DATA_DIR() -> str:
     return os.getenv("QMODES_TEST_INPUT_DATA_DIR")
 
-def get_qMODES_TEST_OUTPUT_DATA_DIR() -> str:
+def get_QMODES_TEST_OUTPUT_DATA_DIR() -> str:
     return os.getenv("QMODES_TEST_OUTPUT_DATA_DIR")
 
 # Functinos to retrieve parameter files

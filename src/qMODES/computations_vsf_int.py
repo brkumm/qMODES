@@ -13,11 +13,10 @@
 
 #------------------------------------------------------------------------------
 # IMPORTS
-#from .get_environment_variables import get_QMODES_VSF_DIR, get_QMODES_VSFINT_DIR
-from .get_environment_variables import get_QMODES_INPUT_DATA_DIR
-from .parameters   import nM, ps0
-from .templates    import get_QMODES_VSF_DIR, get_QMODES_VSFINT_DIR, template_vsf_fname, template_vsf_int_fname
+from .get_environment_variables import get_QMODES_INPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
+from .templates    import template_vsf_fname, template_vsf_int_fname
 
+import yaml 
 import numpy    as np
 import xarray   as xa
 from   datetime import datetime
@@ -51,16 +50,26 @@ def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(),
     """
 
     #-------------------- Setting Computation Parameters --------------------
+    # Input and output files
     vsf_infile  = template_vsf_fname(input_data_dir)
     output_file = template_vsf_int_fname(input_data_dir)
 
+    # Reading in values from parameters file
+    with open(get_QMODES_PARAMETERS_FILE(), 'r') as param_file:
+        params = yaml.safe_load(param_file)
+
+    nM  = params['mode_parameters']['nM'] 
+    ps0 = params['physical_constants']['ps0']
+
+    # reading in vsf data
     vsf_ds     = xa.open_dataset(vsf_infile)
     vsf        = vsf_ds["vsf"].values
     vgrid      = vsf_ds["vgrid"].values
     mp         = len(vgrid)
-
-    vsfint_temp = np.zeros([nM,mp+1]) #Allocation of matrix that will contain all integrals for all vertical modes
     #------------------------------- Main Loop -------------------------------
+
+    #Initializing vsfint array
+    vsfint_temp = np.zeros([nM,mp+1]) #Allocation of matrix that will contain all integrals for all vertical modes
 
     dz = np.zeros(mp + 1)
     
