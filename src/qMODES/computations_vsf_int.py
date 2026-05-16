@@ -14,7 +14,7 @@
 #------------------------------------------------------------------------------
 # IMPORTS
 #from .get_environment_variables import get_QMODES_VSF_DIR, get_QMODES_VSFINT_DIR
-from .get_environment_variables import get_qMODES_INPUT_DATA_DIR
+from .get_environment_variables import get_QMODES_INPUT_DATA_DIR
 from .parameters   import nM, ps0
 from .templates    import get_QMODES_VSF_DIR, get_QMODES_VSFINT_DIR, template_vsf_fname, template_vsf_int_fname
 
@@ -28,12 +28,13 @@ from   datetime import datetime
 #------------------------------------------------------------------------------
 #MAIN COMPUTATION OF INTEGRATED VERTICAL STRUCTURE FUNCTION 
 
-def compute_vsf_int(inputdata_dir: str = get_qMODES_INPUT_DATA_DIR(), author_name: str = None, author_email: str = None) -> None:
+def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(), 
+                    author_name: str =None, author_email: str =None) -> None:
     """
     Function that computes the integrated vertical structure function (VSF)
     values, which are computed as:
 
-    vsf_int(p;m) = int_0^p vsf(p';m) dp'.
+    vsf_int(p;m) = int_0^p vsf(p';m) dp'
 
     The integration is performed using an averaging of the left and right 
     riemannan sums. Previously this was doneusing simpsons method, but this
@@ -50,8 +51,8 @@ def compute_vsf_int(inputdata_dir: str = get_qMODES_INPUT_DATA_DIR(), author_nam
     """
 
     #-------------------- Setting Computation Parameters --------------------
-    vsf_infile  = template_vsf_fname(inputdata_dir)
-    output_file = template_vsf_int_fname(inputdata_dir)
+    vsf_infile  = template_vsf_fname(input_data_dir)
+    output_file = template_vsf_int_fname(input_data_dir)
 
     vsf_ds     = xa.open_dataset(vsf_infile)
     vsf        = vsf_ds["vsf"].values
@@ -105,5 +106,4 @@ def compute_vsf_int(inputdata_dir: str = get_qMODES_INPUT_DATA_DIR(), author_nam
     print(f"vsf_int computation sucessful!!\n\noutput data saved to:\n\t{output_file}")
 
     return
-
 #-----------------------------------------------------------------------------
