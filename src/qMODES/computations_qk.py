@@ -14,7 +14,7 @@
 
 #-----------------------------------------------------------------------------
 # IMPORTS
-from .get_environment_variables import get_QMODES_INPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
+from .get_environment_variables import get_QMODES_INPUT_DATA_DIR, get_QMODES_OUTPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
 from .templates import template_vsf_int_fname, template_hough_fname, template_coef_fname, template_qk_with_klb_kub_ktot_fname
 
 import yaml
@@ -30,7 +30,7 @@ from datetime import datetime
 
 def compute_qk(mode: str, date: str, k_lb: int, k_ub: int, ktot: int = None, 
                input_data_dir: str = get_QMODES_INPUT_DATA_DIR(), 
-               output_data_dir: str = get_QMODES_INPUT_DATA_DIR(), 
+               output_data_dir: str = get_QMODES_OUTPUT_DATA_DIR(), 
                parameter_file: str = get_QMODES_PARAMETERS_FILE(), 
                author_name: str = None, author_email: str = None) -> None:
     """
@@ -64,7 +64,7 @@ def compute_qk(mode: str, date: str, k_lb: int, k_ub: int, ktot: int = None,
         to see how this is done.  
 
     """
-    #---------- Parameters reading setup ----------
+    #---------- Opening parameters file ----------
     with open(parameter_file, 'r') as param_file:
         params = yaml.safe_load(param_file)
 
@@ -146,7 +146,9 @@ def compute_qk(mode: str, date: str, k_lb: int, k_ub: int, ktot: int = None,
                     IM_inner_sum += coefs[0,1,kk,mm,nn] * hough[mm,2,:,nn]
     
                 qk[0,ik,iplev,:] +=  vsf_int[mm,iplev] * RE_inner_sum
-                qk[1,ik,iplev,:] +=  vsf_int[mm,iplev] * IM_inner_sum 
+                qk[1,ik,iplev,:] +=  vsf_int[mm,iplev] * IM_inner_sum
+
+        hough_ds.close()
 
     #---------- Saving Data to outfile ----------
     dtnow = datetime.now()
