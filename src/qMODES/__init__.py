@@ -4,6 +4,9 @@ from .templates                 import *
 from .computations_vsf_int import *
 from .computations_qk import *
 
+from .data_readers import *
+from .standard_plot_parameters import *
+
 
 # from .get_environment_variables import get_qMODES_INPUT_DATA_DIR, get_qMODES_OUTPUT_DATA_DIR, get_qMODES_TEST_INPUT_DATA_DIR, get_qMODES_TEST_OUTPUT_DATA_DIR
 # from .sample_files import sample_vsf_file, sample_vsf_int_file, sample_coef_file, sample_hough_file, sample_freq_file, sample_ERA_file
