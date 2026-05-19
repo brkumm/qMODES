@@ -3,6 +3,7 @@ from .templates                 import *
 
 from .computations_vsf_int import *
 from .computations_qk import *
+from .computations_qmodes import *
 
 from .data_readers import *
 from .standard_plot_parameters import *
