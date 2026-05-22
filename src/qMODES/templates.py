@@ -108,9 +108,9 @@ def template_qmodes_with_klb_kub_ktot_fname(env_var_output_data_dir: str, date: 
 
 
 # File patterns (used by scripts to combine files computed in parallel)
-def template_combine_qk_file_pattern(date: str, ktot_str: str) -> str:
-    return f"qk_{date}0000000_klb-*_kub-*_ktot-{ktot_str}.nc"
+def template_combine_qk_file_pattern(env_var_output_data_dir: str, date: str, ktot_str: str) -> str:
+    return f"{get_QMODES_QKDATA_DIR(env_var_output_data_dir)}/qk_{date}0000000_klb-*_kub-*_ktot-{ktot_str}.nc"
 
-def template_combine_qmodes_file_pattern(date: str, ktot_str: str) -> str:
-    return f"qmodes_{date}0000000_klb-*_kub-*_ktot-{ktot_str}.nc"
+def template_combine_qmodes_file_pattern(env_var_output_data_dir: str, date: str, ktot_str: str) -> str:
+    return f"{get_QMODES_QMODESDATA_DIR(env_var_output_data_dir)}/qmodes_{date}0000000_klb-*_kub-*_ktot-{ktot_str}.nc"
 #--------------------------------------------------------------------------
