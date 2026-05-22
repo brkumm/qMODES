@@ -26,10 +26,7 @@ import glob
 #-----------------------------------------------------------------------------
 # FUNCTIONS
 def get_klb_kub_ktot_from_qk_filename(filename: str):
-
-    # current filename example: qk_201808010000000_klb_002_kub_003_ktot_351.nc
     # input should only be the filename ... no path info.
-
     rep_filename = filename.replace("-", "_")
     filename_split_list = rep_filename.split("_")
 
@@ -38,7 +35,6 @@ def get_klb_kub_ktot_from_qk_filename(filename: str):
     ktot = filename_split_list[7].split(".")[0]
 
     return int(klb), int(kub), int(ktot)
-
 
 
 def get_qk_files_with_date_and_ktot(date: str, ktot: str,

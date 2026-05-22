@@ -69,6 +69,4 @@ if rm_old:
     for fname in file_list:
         os.remove(fname)
         print(f"\t{fname}")
-
-
 #-----------------------------------------------------------------------------
