@@ -12,9 +12,8 @@
 
 #-----------------------------------------------------------------------------
 # IMPORTS
-from .read_environment_variables import get_QMODES_QMODESDATA_DIR
+from .get_environment_variables import get_QMODES_OUTPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
 from .templates import template_combine_qmodes_file_pattern
-from .parameters import nK, nplev, nlat, nlon
 
 import os
 import glob
@@ -45,14 +44,21 @@ def get_klb_kub_ktot_from_qmodes_filename(filename):
     return int(klb), int(kub), int(ktot)
 
 
-def get_qmodes_files_with_date_and_ktot(date, ktot):
+def get_qmodes_files_with_date_and_ktot(date: str, ktot_str: int, 
+                                        qmodesdir:str = get_QMODES_OUTPUT_DATA_DIR()):
     
-    pattern = f"{get_QMODES_QMODESDATA_DIR()}/{template_combine_qmodes_file_pattern(date, ktot)}"
+    pattern = template_combine_qmodes_file_pattern(qmodesdir, date, ktot_str)
 
     return glob.glob(pattern)
 
 
-def check_qmodes_files_cover_ktot_range(file_list, ktot=nK):
+def check_qmodes_files_cover_ktot_range(file_list: list[str], ktot:int =None,
+                                        parameter_file:str =get_QMODES_PARAMETERS_FILE()):
+    
+    if ktot == None:
+        with open(parameter_file, 'r') as param_file:
+            params = yaml.safe_load(param_file)
+        ktot=params['mode_parameters']['nK']
 
     ktot_range = set([i for i in range(ktot)])
 
@@ -120,9 +126,13 @@ def combine_qmodes_files_from_list(file_list, outfile):
     dtnow = datetime.now()
 
     ds = xa.open_dataset(file_list[0])
-    plev =  ds["plev"].values
+    plev = ds["plev"].values
     lat  = ds["lat"].values
     lon  = ds["lon"].values
+
+    nplev = len(nplev)
+    nlat  = len(nlat)
+    nlon  = len(nlon)
 
     for mode in modes_list:
 
@@ -132,7 +142,6 @@ def combine_qmodes_files_from_list(file_list, outfile):
         for fname in file_list:
             q_mode_sum += xa.open_dataset(fname)[mode].values
         
-        # saving the data to the output file
         # SAVING DATA TO NETCDF FILE
     
         coords    = {'plev'   : ( ['plev'], plev ),
