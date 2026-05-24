@@ -5,6 +5,7 @@ from qMODES import get_QMODES_TEST_INPUT_DATA_DIR, get_QMODES_TEST_PARAMETERS_FI
 from qMODES import template_ERA_q_fname, template_ERA_uv_fname
 from qMODES import template_coef_fname, template_hough_fname, template_vsf_fname
 
+import os
 import yaml
 import pandas as pd
 import xarray as xa
@@ -16,7 +17,7 @@ import numpy as np
 #-----------------------------------------------------------------------------
 # FUNCTIONS
 
-def generate_test_data() -> None:
+def generate_test_inputdata() -> None:
     # RETRIEVING TEST PARAMETERS AND GENERATING MODE AND GRID COORDINATE DATA
     # Test parameters
     with open(get_QMODES_TEST_PARAMETERS_FILE(), 'r') as param_file:
@@ -26,8 +27,8 @@ def generate_test_data() -> None:
     test_nM = params['mode_parameters']['nM']
     test_nN = params['mode_parameters']['nN']
 
-    test_nlat, test_nlon = params['grid_parameters']['nlat']
-    test_nlon  = params['grid_parameters']['nlon']
+    test_nlat = params['grid_parameters']['nlat']
+    test_nlon = params['grid_parameters']['nlon']
 
     test_date      = params['grid_parameters']['test_date']
     test_date_dt64 = pd.to_datetime(test_date).to_datetime64()
@@ -71,7 +72,7 @@ def generate_test_data() -> None:
     ERA_u_data = np.ones([test_ntime, test_nplev, test_nlat, test_nlon]) # m / s
     ERA_v_data = np.ones([test_ntime, test_nplev, test_nlat, test_nlon]) # m / s
 
-    ERA_coords = {'time': (['time'], test_date_dt64),
+    ERA_coords = {'time': (['time'], [test_date_dt64] ),
                   'lon' : (['lon' ], test_lon), 
                   'lat' : (['lat' ], test_lat), 
                   'plev': (['plev'], test_plev)}
@@ -169,22 +170,20 @@ def generate_test_data() -> None:
 
     print(f"HOUGH TEST DATA")
 
-    hough_vals = np.ones([test_nM, 3, test_nlat, test_nlon, test_nN])
+    nHoughvec = 3
+    hough_vals = np.ones([test_nM, nHoughvec, test_nlat, test_nN])
 
     # Saving Hough test data
     for kk in range(test_nK):
         hough_coords = {'num_vmode' : (['num_vmode'], m_vals),
-                        'uvz'       : (['uvz'], np.array([0,1,2])),
-                        'my'        : (['my'], np.array([i for i in range(test_nlat)]) ),
-                        'maxl'      : (['maxl'], np.array([i for i in range(test_nN)]) ),
-                        'ilon'      : (['ilon'], np.array([i for i in range(test_nlon)]))
-                        }
+                        'uvz'       : (['uvz'],  np.array([0,1,2])),
+                        'my'        : (['my'],   np.array([i for i in range(test_nlat)])),
+                        'maxl'      : (['maxl'], np.array([i for i in range(test_nN)])) }
 
         hough_data_vars = {'EIG': (['num_vmode', 'uvz', 'my', 'maxl'], hough_vals),
                            'WIG': (['num_vmode', 'uvz', 'my', 'maxl'], hough_vals),
                            'BAL': (['num_vmode', 'uvz', 'my', 'maxl'], hough_vals),
-                           'lat': (['my'], test_lat),
-                           'lon': (['ilon'], test_lon) }
+                           'lat': (['my'], test_lat) }
 
         hough_ds = xa.Dataset( data_vars = hough_data_vars,
                                coords    = hough_coords )
@@ -263,22 +262,18 @@ def generate_test_data() -> None:
 
     return
 
+
 def remove_test_inputdata() -> None:
-    
+
     print("THE FOLLOWING TEST DATA FILES HAVE BEEN REMOVED:")
-
     # Traverse through the directory tree
-    for root, _, files in os.walk(directory_path):
+    for root, _, files in os.walk( get_QMODES_TEST_INPUT_DATA_DIR()):
         for file in files:
-            
             file_path = os.path.join(root, file)
-            print(file_path)
-            #try:
-            #    # Remove the file
-            #    os.remove(file_path)
-            #    print(f"Deleted: {file_path}")
-            #except OSError as e:
-            #    print(f"Error: {file_path} : {e.strerror}")
-
+            try:
+                os.remove(file_path)
+                print(f"\t{file_path}")
+            except OSError as e:
+                print(f"Error: {file_path} : {e.strerror}")
 
     return
