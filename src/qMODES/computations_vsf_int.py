@@ -13,7 +13,7 @@
 
 #------------------------------------------------------------------------------
 # IMPORTS
-from .get_environment_variables import get_QMODES_INPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
+from .get_environment_variables import get_QMODES_INPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE, get_QMODES_PARAMETERS_FILE
 from .templates    import template_vsf_fname, template_vsf_int_fname
 
 import yaml 
@@ -27,7 +27,8 @@ from   datetime import datetime
 #------------------------------------------------------------------------------
 #MAIN COMPUTATION OF INTEGRATED VERTICAL STRUCTURE FUNCTION 
 
-def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(), 
+def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(),
+                    parameter_file: str =get_QMODES_PARAMETERS_FILE(), 
                     author_name: str =None, author_email: str =None) -> None:
     """
     Function that computes the integrated vertical structure function (VSF)
@@ -55,10 +56,9 @@ def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(),
     output_file = template_vsf_int_fname(input_data_dir)
 
     # Reading in values from parameters file
-    with open(get_QMODES_PARAMETERS_FILE(), 'r') as param_file:
+    with open(parameter_file, 'r') as param_file:
         params = yaml.safe_load(param_file)
 
-    nM  = params['mode_parameters']['nM'] 
     ps0 = params['physical_constants']['ps0']
 
     # reading in vsf data
@@ -66,6 +66,7 @@ def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(),
     vsf        = vsf_ds["vsf"].values
     vgrid      = vsf_ds["vgrid"].values
     mp         = len(vgrid)
+    nM         = vsf_ds.sizes["num_vmode"]
     #------------------------------- Main Loop -------------------------------
 
     #Initializing vsfint array
@@ -84,7 +85,7 @@ def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(),
         for m in range(0, nM):
             vsfint_temp[m, k] = vsfint_temp[m, k - 1] + vsf[m, mp - k] * dp
     
-    vsf_int = vsfint_temp[:, 1:]      # Integrals of all VSFs that are later used to evaluate eq. 33
+    vsf_int = vsfint_temp[:, 1:] #
     vmodes  = np.array([i for i in range(nM)])
 
 
@@ -96,7 +97,7 @@ def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(),
     dtnow     = datetime.now()
     
     coords = { 'vgrid_int': (['vgrid_int' ], vgrid_int),
-                  'vmodes'   : (['vmodes'], vmodes ) }
+                  'num_vmode'   : (['num_vmode'], vmodes ) }
     
 
     data_vars = {'vsf_int':(['num_vmode', 'vgrid_int'], vsf_int,
