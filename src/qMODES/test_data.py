@@ -132,9 +132,8 @@ def generate_test_inputdata() -> None:
             vsf_vals[iM, iplev] = poly(test_plev[iplev], iM-1) 
 
     # Saving Values to test_data dir
-
-    vsf_coords = {'mp'    : (['mp'], np.array([i for i in range(test_nplev)]) ), 
-                 'vmodes' : (['num_vmode'], m_vals)}
+    vsf_coords = {'mp'    : (['mp'], np.array([i for i in range(test_nplev)]) ),
+                 'num_vmode' : (['num_vmode'], m_vals)}
 
     vsf_data_vars = {'vsf'  : (['num_vmode', 'mp'], vsf_vals),
                      'vgrid': (['mp'], test_plev)}
