@@ -1,7 +1,6 @@
 #-----------------------------------------------------------------------------
 # IMPORTS
 from qMODES import compute_qmodes
-from qMODES import nK
 from qMODES import get_QMODES_SUPPRESS_NEW_USER_WARNINGS as suppress_warnings
 
 import argparse
@@ -28,7 +27,7 @@ parser.add_argument('-m','--mode', help='Mode to compute qk values for: [EIG, WI
 parser.add_argument('-d','--date', help='Date to comput the qk values for', required=True)
 parser.add_argument('--klb',  help='Lower bound of k values', type=int, required=True)
 parser.add_argument('--kub',  help='Upper bound of k values', type=int, required=True)
-parser.add_argument('--ktot', help='Total number of k values', type=int, default=nK  )
+parser.add_argument('--ktot', help='Total number of k values', type=int, required=True)
 
 args   = parser.parse_args()
 mode   = args.mode
@@ -44,12 +43,12 @@ ktot   = args.ktot
 # MAIN COMPUTATIONS
 
 if mode == 'ALL':
-    compute_qmodes("EIG", str(date), int(klb), int(kub))
-    compute_qmodes("WIG", str(date), int(klb), int(kub))
-    compute_qmodes("BAL", str(date), int(klb), int(kub))
+    compute_qmodes("EIG", date, klb, kub, ktot)
+    compute_qmodes("WIG", date, klb, kub, ktot)
+    compute_qmodes("BAL", date, klb, kub, ktot)
 
 elif mode in ["EIG", "WIG", "BAL"]:
-    compute_qmodes(str(mode), str(date), int(klb), int(kub))
+    compute_qmodes(mode, date, klb, kub, ktot)
 
 else:
     print(f"ERROR: for the mode command line argument you input: {mode}")

@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------------
 # File:          computations_vsf_int.py
 # Author:        Bradley Kumm (brkumm@gmail.com)
-# Last Modified: 2026/04/15 (YYYY/MM/DD)
+# Last Modified: 2026/05/14 (YYYY/MM/DD)
 # Description:   Various functions used to compute the integrated Vertical
 #                Structure Function (VSF) values from an input VSF data file.
 #
@@ -13,10 +13,10 @@
 
 #------------------------------------------------------------------------------
 # IMPORTS
-from .read_environment_variables import get_QMODES_VSF_DIR, get_QMODES_VSFINT_DIR
-from .parameters   import nM, ps0
+from .get_environment_variables import get_QMODES_INPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE, get_QMODES_PARAMETERS_FILE
 from .templates    import template_vsf_fname, template_vsf_int_fname
 
+import yaml 
 import numpy    as np
 import xarray   as xa
 from   datetime import datetime
@@ -27,12 +27,14 @@ from   datetime import datetime
 #------------------------------------------------------------------------------
 #MAIN COMPUTATION OF INTEGRATED VERTICAL STRUCTURE FUNCTION 
 
-def compute_vsf_int(out_dir=None, author_name=None, author_email=None):
+def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(),
+                    parameter_file: str =get_QMODES_PARAMETERS_FILE(), 
+                    author_name: str =None, author_email: str =None) -> None:
     """
     Function that computes the integrated vertical structure function (VSF)
     values, which are computed as:
 
-    vsf_int(p;m) = int_0^p vsf(p';m) dp'.
+    vsf_int(p;m) = int_0^p vsf(p';m) dp'
 
     The integration is performed using an averaging of the left and right 
     riemannan sums. Previously this was doneusing simpsons method, but this
@@ -48,22 +50,27 @@ def compute_vsf_int(out_dir=None, author_name=None, author_email=None):
 
     """
 
-    #-------------------- Setting Computation Parameters ---------------------
+    #-------------------- Setting Computation Parameters --------------------
+    # Input and output files
+    vsf_infile  = template_vsf_fname(input_data_dir)
+    output_file = template_vsf_int_fname(input_data_dir)
 
-    vsf_dir = get_QMODES_VSF_DIR()
-    out_dir = get_QMODES_VSFINT_DIR()
+    # Reading in values from parameters file
+    with open(parameter_file, 'r') as param_file:
+        params = yaml.safe_load(param_file)
 
-    outfile = f"{out_dir}/{template_vsf_int_fname()}"
+    ps0 = params['physical_constants']['ps0']
 
-    vsf_infile = f"{vsf_dir}/{template_vsf_fname()}"
+    # reading in vsf data
     vsf_ds     = xa.open_dataset(vsf_infile)
     vsf        = vsf_ds["vsf"].values
     vgrid      = vsf_ds["vgrid"].values
     mp         = len(vgrid)
-
-    vsfint_temp = np.zeros([nM,mp+1]) #Allocation of matrix that will contain all integrals for all vertical modes
-
+    nM         = vsf_ds.sizes["num_vmode"]
     #------------------------------- Main Loop -------------------------------
+
+    #Initializing vsfint array
+    vsfint_temp = np.zeros([nM,mp+1]) #Allocation of matrix that will contain all integrals for all vertical modes
 
     dz = np.zeros(mp + 1)
     
@@ -78,11 +85,11 @@ def compute_vsf_int(out_dir=None, author_name=None, author_email=None):
         for m in range(0, nM):
             vsfint_temp[m, k] = vsfint_temp[m, k - 1] + vsf[m, mp - k] * dp
     
-    vsf_int = vsfint_temp[:, 1:]      # Integrals of all VSFs that are later used to evaluate eq. 33
+    vsf_int = vsfint_temp[:, 1:] #
     vmodes  = np.array([i for i in range(nM)])
 
 
-    #-------------------- Saving vsf_int Values to Outfile -------------------
+    #-------------------- Saving vsf_int Values to output_file -------------------
 
     vgrid_int = vgrid[::-1] #ordering switches because integration is done from top of atmosphere to surface
     out_units = 'Pa'
@@ -90,7 +97,7 @@ def compute_vsf_int(out_dir=None, author_name=None, author_email=None):
     dtnow     = datetime.now()
     
     coords = { 'vgrid_int': (['vgrid_int' ], vgrid_int),
-                  'vmodes'   : (['vmodes'], vmodes ) }
+                  'num_vmode'   : (['num_vmode'], vmodes ) }
     
 
     data_vars = {'vsf_int':(['num_vmode', 'vgrid_int'], vsf_int,
@@ -105,9 +112,8 @@ def compute_vsf_int(out_dir=None, author_name=None, author_email=None):
                     coords = coords,
                     attrs = attrs)
     
-    ds.to_netcdf(outfile)
-    print(f"vsf_int computation sucessful!!\n\noutput data saved to:\n\t{outfile}")
+    ds.to_netcdf(output_file)
+    print(f"vsf_int computation sucessful!!\n\noutput data saved to:\n\t{output_file}")
 
     return
-
 #-----------------------------------------------------------------------------

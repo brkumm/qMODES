@@ -2,7 +2,7 @@
 # File:          combine_qk.py
 # Author:        Bradley Kumm (brkumm@gmail.com)
 # Last Modified: 2026/04/15 (YYYY/MM/DD)
-# Description:   Functions used to agrogate the qmodes files. 
+# Description:   Functions used to aggregate the qmodes files. 
 #
 # Notes:         
 #               
@@ -12,10 +12,10 @@
 
 #-----------------------------------------------------------------------------
 # IMPORTS
-from .read_environment_variables import get_QMODES_QMODESDATA_DIR
+from .get_environment_variables import get_QMODES_OUTPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
 from .templates import template_combine_qmodes_file_pattern
-from .parameters import nK, nplev, nlat, nlon
 
+import yaml
 import os
 import glob
 import xarray as xa
@@ -27,14 +27,8 @@ from datetime import datetime
 
 #-----------------------------------------------------------------------------
 # FUNCTIONS
-
-
-#----- Functions to check if necessary files exist -----
 def get_klb_kub_ktot_from_qmodes_filename(filename):
-
-    # current filename example: qk_201808010000000_klb_002_kub_003_ktot_351.nc
     # input should only be the filename ... no path info.
-
     rep_filename = filename.replace("-", "_")
     filename_split_list = rep_filename.split("_")
 
@@ -45,14 +39,20 @@ def get_klb_kub_ktot_from_qmodes_filename(filename):
     return int(klb), int(kub), int(ktot)
 
 
-def get_qmodes_files_with_date_and_ktot(date, ktot):
+def get_qmodes_files_with_date_and_ktot(date: str, ktot_str: int, 
+                                        qmodesdir:str = get_QMODES_OUTPUT_DATA_DIR()):
     
-    pattern = f"{get_QMODES_QMODESDATA_DIR()}/{template_combine_qmodes_file_pattern(date, ktot)}"
-
+    pattern = template_combine_qmodes_file_pattern(qmodesdir, date, ktot_str)
     return glob.glob(pattern)
 
 
-def check_qmodes_files_cover_ktot_range(file_list, ktot=nK):
+def check_qmodes_files_cover_ktot_range(file_list: list[str], ktot:int =None,
+                                        parameter_file:str =get_QMODES_PARAMETERS_FILE()):
+    
+    if ktot == None:
+        with open(parameter_file, 'r') as param_file:
+            params = yaml.safe_load(param_file)
+        ktot=params['mode_parameters']['nK']
 
     ktot_range = set([i for i in range(ktot)])
 
@@ -73,7 +73,8 @@ def check_qmodes_files_cover_ktot_range(file_list, ktot=nK):
             print(f"\t{filename}")
         return False
 
-def check_qmodes_files_have_all_modes(file_list):
+
+def check_qmodes_files_have_all_modes(file_list: list[str]):
 
     var_set = {"q_EIG","q_WIG","q_BAL"}
     is_first_error = True
@@ -109,10 +110,7 @@ def check_qmodes_files_have_all_modes(file_list):
     else: return False
 
 
-
-#----- Function to combine files -----
-
-def combine_qmodes_files_from_list(file_list, outfile):
+def combine_qmodes_files_from_list(file_list: list[str], outfile: str):
     # initializing combined dataset to first file in file_list
     # Going to try writing one mode at a time to see how much memory is used
 
@@ -120,9 +118,15 @@ def combine_qmodes_files_from_list(file_list, outfile):
     dtnow = datetime.now()
 
     ds = xa.open_dataset(file_list[0])
-    plev =  ds["plev"].values
+    plev = ds["plev"].values
     lat  = ds["lat"].values
     lon  = ds["lon"].values
+
+    nplev = len(plev)
+    nlat  = len(lat)
+    nlon  = len(lon)
+
+    q_mode_sum  = np.zeros((nplev, nlat, nlon))
 
     for mode in modes_list:
 
@@ -130,11 +134,11 @@ def combine_qmodes_files_from_list(file_list, outfile):
         q_mode_sum  = np.zeros((nplev, nlat, nlon))
 
         for fname in file_list:
-            q_mode_sum += xa.open_dataset(fname)[mode].values
+            q_mode_ds = xa.open_dataset(fname)
+            q_mode_sum += q_mode_ds[mode].values
+            q_mode_ds.close()
         
-        # saving the data to the output file
-        # SAVING DATA TO NETCDF FILE
-    
+        # SAVING DATA TO NETCDF FILE    
         coords    = {'plev'   : ( ['plev'], plev ),
                      'lat'    : ( ['lat' ], lat  ),
                      'lon'    : ( ['lon' ], lon  ) }
@@ -148,10 +152,10 @@ def combine_qmodes_files_from_list(file_list, outfile):
                                coords    = coords,
                                attrs     = attrs)
         
-        ds.to_netcdf(outfile, mode='a')
+        ds.to_netcdf(outfile, mode='a', engine="netcdf4")
+        ds.close()
     
     print(f"Data saved to:\n\t{outfile}")
     
     return
-
 #-----------------------------------------------------------------------------

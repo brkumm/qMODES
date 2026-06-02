@@ -12,28 +12,21 @@
 
 #-----------------------------------------------------------------------------
 # IMPORTS
-from .read_environment_variables import get_QMODES_QKDATA_DIR
+from .get_environment_variables import get_QMODES_OUTPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
 from .templates import template_combine_qk_file_pattern
-from .parameters import nK
 
-import xarray as xa
-import numpy as xp
-import glob
 import os
+import yaml
+import xarray as xa
+import glob
 #-----------------------------------------------------------------------------
 
 
 
 #-----------------------------------------------------------------------------
 # FUNCTIONS
-
-
-#----- Functions to check if necessary files exist -----
-def get_klb_kub_ktot_from_qk_filename(filename):
-
-    # current filename example: qk_201808010000000_klb_002_kub_003_ktot_351.nc
+def get_klb_kub_ktot_from_qk_filename(filename: str):
     # input should only be the filename ... no path info.
-
     rep_filename = filename.replace("-", "_")
     filename_split_list = rep_filename.split("_")
 
@@ -44,14 +37,23 @@ def get_klb_kub_ktot_from_qk_filename(filename):
     return int(klb), int(kub), int(ktot)
 
 
-def get_qk_files_with_date_and_ktot(date, ktot):
+def get_qk_files_with_date_and_ktot(date: str, ktot: str,
+                                    outdata_dir:str = get_QMODES_OUTPUT_DATA_DIR()):
     
-    pattern = f"{get_QMODES_QKDATA_DIR()}/{template_combine_qk_file_pattern(date, ktot)}"
+    pattern = template_combine_qk_file_pattern(outdata_dir, date, ktot)
 
     return glob.glob(pattern)
 
 
-def check_qk_files_cover_ktot_range(file_list, ktot=nK):
+
+def check_qk_files_cover_ktot_range(file_list: list[str], ktot:int =None,
+                                    parameter_file:str =get_QMODES_PARAMETERS_FILE()):
+
+    if ktot == None:
+        with open(parameter_file, 'r') as param_file:
+            params = yaml.safe_load(param_file)
+        ktot=params['mode_parameters']['nK']
+
 
     ktot_range = set([i for i in range(ktot)])
 
@@ -68,10 +70,12 @@ def check_qk_files_cover_ktot_range(file_list, ktot=nK):
 
     else:
         print("ERROR: Not all k values are covered by the following files")
-        for fname in file_list: print(f"\tfname")
+        for fname in file_list: print(f"\t{fname}")
         return False
 
-def check_qk_files_have_all_modes(file_list):
+
+
+def check_qk_files_have_all_modes(file_list: list[str]):
 
     var_set = {"qk_EIG","qk_WIG","qk_BAL"}
     is_first_error = True
@@ -107,14 +111,11 @@ def check_qk_files_have_all_modes(file_list):
 
 
 
-#----- Function to combine files -----
-
-def combine_qk_files_from_list(file_list, output_filename):
+def combine_qk_files_from_list(file_list: list[str], output_filename: str):
     combined_ds = xa.open_mfdataset(file_list, combine="by_coords")
     combined_ds.to_netcdf(output_filename)
 
     print(f"Files combined and saved to:\n\t{output_filename}")
 
     return
-
 #-----------------------------------------------------------------------------
