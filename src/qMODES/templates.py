@@ -93,8 +93,8 @@ def template_freq_fname(env_var_input_data_dir: str, k_str: str) -> str:
 
 
 # Output data filenames
-def template_qk_fname(env_var_output_data_dir: str, date: str) -> str:
-	return f"{get_QMODES_QKDATA_DIR(env_var_output_data_dir)}/qk_{date}0000000.nc"
+def template_qk_fname(env_var_output_data_dir: str, date: str, klb_str: str, kub_str: str, ktot_str: str) -> str:
+	return f"{get_QMODES_QKDATA_DIR(env_var_output_data_dir)}/qk_{date}0000000_klb-{klb_str}_kub-{kub_str}_ktot-{ktot_str}.nc"
 
 def template_qk_with_klb_kub_ktot_fname(env_var_output_data_dir: str, date: str, klb_str: str, kub_str: str, ktot_str: str) -> str:
 	return f"{get_QMODES_QKDATA_DIR(env_var_output_data_dir)}/qk_{date}0000000_klb-{klb_str}_kub-{kub_str}_ktot-{ktot_str}.nc"

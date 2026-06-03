@@ -27,11 +27,15 @@ default_ktot = params['mode_parameters']['nK']
 # READING COMMAND LINE ARGUMENTS USING argparse
 parser = argparse.ArgumentParser(description='This script is used to aggregate qk datafiles that are from the same date but cover different k values.')
 parser.add_argument('-d','--date', help='Date to comput the qk values for', required=True)
-parser.add_argument('--ktot', help='Total number of k values', type=int, default=default_ktot  )
+parser.add_argument('--klb', help='k value lower bound', type=int, required=True)
+parser.add_argument('--kub', help='k value upper bound', type=int, required=True)
+parser.add_argument('--ktot', help='Total number of k values', type=int, required=True)
 parser.add_argument('--rm_old', help='include to remove old files after creating aggregate file', action='store_true')
 
 args   = parser.parse_args()
 date   = args.date
+klb   = args.klb
+kub   = args.kub
 ktot   = args.ktot
 rm_old = args.rm_old
 
@@ -44,11 +48,12 @@ rm_old = args.rm_old
 
 # Getting all qk files in QMODES_QKDATA_DIR that have date and ktot
 # specified from argparse arguments.
-
+klb_str  = "0"*(3-len(str(klb)))  + str(klb)
+kub_str  = "0"*(3-len(str(kub)))  + str(kub)
 ktot_str = "0"*(3-len(str(ktot))) + str(ktot)
 
 file_list = get_qk_files_with_date_and_ktot(date, ktot_str)
-combined_outfile = template_qk_fname(get_QMODES_OUTPUT_DATA_DIR(), date) 
+combined_outfile = template_qk_fname(get_QMODES_OUTPUT_DATA_DIR(), date, klb_str, kub_str, ktot_str) 
 
 
 # Check if file_list covers all of the k values

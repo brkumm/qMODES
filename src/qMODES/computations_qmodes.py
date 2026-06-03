@@ -86,7 +86,8 @@ def compute_qmodes(mode: str, date: str, k_lb: int, k_ub: int, ktot: int =None,
 
     kvals     = np.array( [i for i in range(k_lb, k_ub+1)] )
     grid_file = params['sample_files']['grid_file']
-    qk_infile = template_qk_fname(output_data_dir, date)
+    qk_infile = template_qk_fname(output_data_dir, date, klb_str, kub_str, 
+                                  ktot_str)
     outfile   = template_qmodes_with_klb_kub_ktot_fname(output_data_dir, date,
                                                         klb_str, kub_str,
                                                         ktot_str)
@@ -144,5 +145,4 @@ def compute_qmodes(mode: str, date: str, k_lb: int, k_ub: int, ktot: int =None,
     print(f"q_{mode} data saved to:\n\t{outfile}")
 
     return
-
 #--------------------------------------------------------------------------
