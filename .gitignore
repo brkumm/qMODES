@@ -1,5 +1,2 @@
-src/qMODES/__pycache__/
-plotting_scripts/__pycache__/
-tests/unit_tests/__pycache__/
-tests/end_to_end_tests/__pycache__/
+**/__pycache__/
 **/.DS_Store
