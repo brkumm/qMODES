@@ -1,6 +1,5 @@
 #-----------------------------------------------------------------------------
 # IMPORTS
-
 from qMODES import get_QMODES_TEST_INPUT_DATA_DIR, get_QMODES_TEST_PARAMETERS_FILE
 from qMODES import template_ERA_q_fname, template_ERA_uv_fname
 from qMODES import template_coef_fname, template_hough_fname, template_vsf_fname
@@ -10,46 +9,14 @@ import yaml
 import pandas as pd
 import xarray as xa
 import numpy as np
+import argparse
 #-----------------------------------------------------------------------------
 
 
 
 #-----------------------------------------------------------------------------
 # FUNCTIONS
-
-def generate_test_inputdata() -> None:
-    # RETRIEVING TEST PARAMETERS AND GENERATING MODE AND GRID COORDINATE DATA
-    # Test parameters
-    with open(get_QMODES_TEST_PARAMETERS_FILE(), 'r') as param_file:
-        params = yaml.safe_load(param_file)
-
-    test_nK = params['mode_parameters']['nK']
-    test_nM = params['mode_parameters']['nM']
-    test_nN = params['mode_parameters']['nN']
-
-    test_nlat = params['grid_parameters']['nlat']
-    test_nlon = params['grid_parameters']['nlon']
-
-    test_date      = params['grid_parameters']['test_date']
-    test_date_dt64 = pd.to_datetime(test_date).to_datetime64()
-
-    # Test data: mode values
-    k_vals = [i for i in range(test_nK)]
-    n_vals = [i for i in range(test_nN)]
-    m_vals = [i for i in range(test_nM)]
-
-    # Test data: grid values
-    test_lat = [-90  + 180/(test_nlat)*(i+0.5) for i in range(test_nlat)]
-    test_lon = [-180 + 360/(test_nlon)*(i+0.5) for i in range(test_nlon)]
-    test_plev = params['grid_parameters']['test_plev'] #plevs specified in params file
-    test_nplev = len(test_plev)
-
-    # Initial print statement:
-    print(f"\nTHE FOLLOWING TEST FILES HAVE BEEN CREATED:\n")
-
-    #-------------------------------------------------------------------------
-    # GENERATE ERA q and u,v TEST DATA FILES
-
+def generate_test_ERA_q_data() -> None:
     # Dataset from regular ERA q datafile
     # Dimensions:  (time: 1, lon: 1280, lat: 640, plev: 137)
     # Coordinates:
@@ -59,18 +26,26 @@ def generate_test_inputdata() -> None:
     #   * plev     (plev) float64 1kB 1.0 3.0 4.0 6.0 ... 1.007e+05 1.01e+05 1.012e+05
     # Data variables:
     #     q        (time, plev, lat, lon) float32 449MB ...
-    #
-    #     ... same for u,v file ...
-    #
-    #     u        (time, plev, lat, lon) float32 449MB ...
-    #     v        (time, plev, lat, lon) float32 449MB ...
 
-    print(f"ERA TEST DATA")
+    # RETRIEVING TEST PARAMETERS AND GENERATING MODE AND GRID COORDINATE DATA
+    # Test parameters
+    with open(get_QMODES_TEST_PARAMETERS_FILE(), 'r') as param_file:
+        params = yaml.safe_load(param_file)
+
+    test_nlat = params['grid_parameters']['nlat']
+    test_nlon = params['grid_parameters']['nlon']
+
+    test_date      = params['grid_parameters']['test_date']
+    test_date_dt64 = pd.to_datetime(test_date).to_datetime64()
+
+    # Test data: grid values
+    test_lat  = [-90  + 180/(test_nlat)*(i+0.5) for i in range(test_nlat)]
+    test_lon  = [-180 + 360/(test_nlon)*(i+0.5) for i in range(test_nlon)]
+    test_plev = params['grid_parameters']['test_plev'] #plevs specified in params file
+    test_nplev = len(test_plev)
 
     test_ntime = 1
     ERA_q_data = 0.002 * np.ones([test_ntime, test_nplev, test_nlat, test_nlon]) # kg / kg
-    ERA_u_data = np.ones([test_ntime, test_nplev, test_nlat, test_nlon]) # m / s
-    ERA_v_data = np.ones([test_ntime, test_nplev, test_nlat, test_nlon]) # m / s
 
     ERA_coords = {'time': (['time'], [test_date_dt64] ),
                   'lon' : (['lon' ], test_lon), 
@@ -85,7 +60,48 @@ def generate_test_inputdata() -> None:
     ERA_q_outfile = template_ERA_q_fname(get_QMODES_TEST_INPUT_DATA_DIR(), test_date)
     ERA_q_ds.to_netcdf(ERA_q_outfile)
     ERA_q_ds.close()
+
     print(f"\t{ERA_q_outfile}")
+
+    return
+
+def generate_test_ERA_uv_data() -> None:
+    # Dataset from regular ERA q datafile
+    # Dimensions:  (time: 1, lon: 1280, lat: 640, plev: 137)
+    # Coordinates:
+    #   * time     (time) datetime64[ns] 8B 2018-08-11
+    #   * lon      (lon) float64 10kB 0.0 0.2812 0.5625 0.8438 ... 359.2 359.4 359.7
+    #   * lat      (lat) float64 5kB 89.78 89.51 89.23 88.95 ... -89.23 -89.51 -89.78
+    #   * plev     (plev) float64 1kB 1.0 3.0 4.0 6.0 ... 1.007e+05 1.01e+05 1.012e+05
+    # Data variables:
+    #     u        (time, plev, lat, lon) float32 449MB ...
+    #     v        (time, plev, lat, lon) float32 449MB ...
+
+    # RETRIEVING TEST PARAMETERS AND GENERATING MODE AND GRID COORDINATE DATA
+    # Test parameters
+    with open(get_QMODES_TEST_PARAMETERS_FILE(), 'r') as param_file:
+        params = yaml.safe_load(param_file)
+
+    test_nlat = params['grid_parameters']['nlat']
+    test_nlon = params['grid_parameters']['nlon']
+
+    test_date      = params['grid_parameters']['test_date']
+    test_date_dt64 = pd.to_datetime(test_date).to_datetime64()
+
+    # Test data: grid values
+    test_lat  = [-90  + 180/(test_nlat)*(i+0.5) for i in range(test_nlat)]
+    test_lon  = [-180 + 360/(test_nlon)*(i+0.5) for i in range(test_nlon)]
+    test_plev = params['grid_parameters']['test_plev'] #plevs specified in params file
+    test_nplev = len(test_plev)
+
+    test_ntime = 1
+    ERA_u_data = np.ones([test_ntime, test_nplev, test_nlat, test_nlon]) # m / s
+    ERA_v_data = np.ones([test_ntime, test_nplev, test_nlat, test_nlon]) # m / s
+
+    ERA_coords = {'time': (['time'], [test_date_dt64] ),
+                  'lon' : (['lon' ], test_lon), 
+                  'lat' : (['lat' ], test_lat), 
+                  'plev': (['plev'], test_plev)}
 
     ERA_uv_data_vars = {'u': (['time', 'plev', 'lat', 'lon'], ERA_u_data),
                         'v': (['time', 'plev', 'lat', 'lon'], ERA_v_data) }
@@ -96,11 +112,12 @@ def generate_test_inputdata() -> None:
     ERA_uv_outfile = template_ERA_uv_fname(get_QMODES_TEST_INPUT_DATA_DIR(), test_date)
     ERA_uv_ds.to_netcdf(ERA_uv_outfile)
     ERA_uv_ds.close()
+
     print(f"\t{ERA_uv_outfile}")
 
-    #-------------------------------------------------------------------------
-    # GENERATE VSF TEST DATA
+    return
 
+def generate_test_vsf_data() -> None:
     # Dataset from regular VSF file:
     # 
     # Dimensions:       (mp: 137, num_vmode: 120)
@@ -121,7 +138,19 @@ def generate_test_inputdata() -> None:
     #    vsf(m=1, p) = 1 -> vsf_int(m=1, p) = p
     #    vsf(m=2, p) = p -> vsf_int(m=2, p) = p^2 / 2
 
-    print(f"VSF TEST DATA")
+    # RETRIEVING TEST PARAMETERS AND GENERATING MODE AND GRID COORDINATE DATA
+    # Test parameters
+    with open(get_QMODES_TEST_PARAMETERS_FILE(), 'r') as param_file:
+        params = yaml.safe_load(param_file)
+
+    test_nM = params['mode_parameters']['nM']
+
+    # Test data: mode values
+    m_vals = [i for i in range(test_nM)]
+
+    # Test data: grid values
+    test_plev = params['grid_parameters']['test_plev'] #plevs specified in params file
+    test_nplev = len(test_plev)
 
     poly = lambda p,m: p ** m
 
@@ -143,10 +172,12 @@ def generate_test_inputdata() -> None:
 
     vsf_outfile = template_vsf_fname(get_QMODES_TEST_INPUT_DATA_DIR())
     vsf_ds.to_netcdf(vsf_outfile)
+
     print(f"\t{vsf_outfile}")
 
-    #-------------------------------------------------------------------------
-    # GENERATE HOUGH TEST DATA
+    return
+
+def generate_test_hough_data() -> None:
 
     # Dataset from regular MODES Hough file:
     #
@@ -167,8 +198,23 @@ def generate_test_inputdata() -> None:
     # hough(m, uvz, lat, n) = 1 for all values.
     # Will turn terms in sum on and off with coef values.
 
-    print(f"HOUGH TEST DATA")
+    # RETRIEVING TEST PARAMETERS AND GENERATING MODE AND GRID COORDINATE DATA
+    # Test parameters
+    with open(get_QMODES_TEST_PARAMETERS_FILE(), 'r') as param_file:
+        params = yaml.safe_load(param_file)
 
+    test_nK = params['mode_parameters']['nK']
+    test_nM = params['mode_parameters']['nM']
+    test_nN = params['mode_parameters']['nN']
+
+    test_nlat = params['grid_parameters']['nlat']
+
+    # Test data: mode values
+    m_vals = [i for i in range(test_nM)]
+
+    # Test data: grid values
+    test_lat = [-90  + 180/(test_nlat)*(i+0.5) for i in range(test_nlat)]
+    
     nHoughvec = 3
     hough_vals = np.ones([test_nM, nHoughvec, test_nlat, test_nN])
 
@@ -191,11 +237,12 @@ def generate_test_inputdata() -> None:
 
         hough_outfile = template_hough_fname(get_QMODES_TEST_INPUT_DATA_DIR(), k_str)
         hough_ds.to_netcdf(hough_outfile)
+
         print(f"\t{hough_outfile}")
 
-    #-------------------------------------------------------------------------
-    # GENERATE COEF TEST DATA
+    return
 
+def generate_test_coef_data() -> None:
     # Dataset from regular MODES Coef file:
     #
     # Dimensions:  (n: 200, m: 60, k: 351, time: 1, Re+Im: 2)
@@ -222,8 +269,26 @@ def generate_test_inputdata() -> None:
     #    q_{k,WIG} -> k=4,8 turned on
     #    q_{k,BAL} -> k=1,2 turned on
 
-    print(f"COEF TEST DATA")
+    # RETRIEVING TEST PARAMETERS AND GENERATING MODE AND GRID COORDINATE DATA
+    # Test parameters
+    with open(get_QMODES_TEST_PARAMETERS_FILE(), 'r') as param_file:
+        params = yaml.safe_load(param_file)
 
+    test_nK = params['mode_parameters']['nK']
+    test_nM = params['mode_parameters']['nM']
+    test_nN = params['mode_parameters']['nN']
+
+    test_nlat = params['grid_parameters']['nlat']
+
+    test_date      = params['grid_parameters']['test_date']
+
+    # Test data: mode values
+    k_vals = [i for i in range(test_nK)]
+    n_vals = [i for i in range(test_nN)]
+    m_vals = [i for i in range(test_nM)]
+
+    # Test data: grid values
+    test_lat = [-90  + 180/(test_nlat)*(i+0.5) for i in range(test_nlat)]
 
     EIG_coef_vals = np.zeros([1, 2, test_nK, test_nM, test_nN]) # coords are [time, Re+Im, k, m, n]
     WIG_coef_vals = np.zeros([1, 2, test_nK, test_nM, test_nN]) # coords are [time, Re+Im, k, m, n]
@@ -257,12 +322,50 @@ def generate_test_inputdata() -> None:
     
     coef_outfile = template_coef_fname(get_QMODES_TEST_INPUT_DATA_DIR(), test_date)
     coef_ds.to_netcdf(coef_outfile)
-    print(f"\t{coef_outfile}\n")
+
+    print(f"\t{coef_outfile}")
 
     return
 
 
-def remove_test_inputdata() -> None:
+def generate_all_test_inputdata() -> None:
+    
+    generate_test_ERA_q_data()
+    generate_test_ERA_uv_data()
+    generate_test_vsf_data()
+    generate_test_hough_data()
+    generate_test_coef_data()
+
+    return
+
+
+
+def remove_all_test_inputdata() -> None:
+        # RETRIEVING TEST PARAMETERS AND GENERATING MODE AND GRID COORDINATE DATA
+    # Test parameters
+    with open(get_QMODES_TEST_PARAMETERS_FILE(), 'r') as param_file:
+        params = yaml.safe_load(param_file)
+
+    test_nK = params['mode_parameters']['nK']
+    test_nM = params['mode_parameters']['nM']
+    test_nN = params['mode_parameters']['nN']
+
+    test_nlat = params['grid_parameters']['nlat']
+    test_nlon = params['grid_parameters']['nlon']
+
+    test_date      = params['grid_parameters']['test_date']
+    test_date_dt64 = pd.to_datetime(test_date).to_datetime64()
+
+    # Test data: mode values
+    k_vals = [i for i in range(test_nK)]
+    n_vals = [i for i in range(test_nN)]
+    m_vals = [i for i in range(test_nM)]
+
+    # Test data: grid values
+    test_lat = [-90  + 180/(test_nlat)*(i+0.5) for i in range(test_nlat)]
+    test_lon = [-180 + 360/(test_nlon)*(i+0.5) for i in range(test_nlon)]
+    test_plev = params['grid_parameters']['test_plev'] #plevs specified in params file
+    test_nplev = len(test_plev)
 
     print("THE FOLLOWING TEST DATA FILES HAVE BEEN REMOVED:")
     # Traverse through the directory tree
@@ -274,5 +377,66 @@ def remove_test_inputdata() -> None:
                 print(f"\t{file_path}")
             except OSError as e:
                 print(f"Error: {file_path} : {e.strerror}")
+    print("")
 
     return
+#-----------------------------------------------------------------------------
+
+
+
+#-----------------------------------------------------------------------------
+# READING COMMAND LINE ARGUMENTS USING argparse
+parser = argparse.ArgumentParser(description='This script is used to aggregate qk datafiles that are from the same date but cover different k values.')
+parser.add_argument('--ALL',    help='Generate ALL input data', action='store_true')
+parser.add_argument('--ERA_q',  help='Generate ERA q input data', action='store_true')
+parser.add_argument('--ERA_uv', help='Generate ERA u & v input data', action='store_true')
+parser.add_argument('--VSF',    help='Generate VSF input data', action='store_true')
+parser.add_argument('--HOUGH',  help='Generate HOUGH input data', action='store_true')
+parser.add_argument('--COEF',   help='Generate COEFFICIENT input data.', action='store_true')
+parser.add_argument('--rm_all', help='Remove all test data', action='store_true')
+
+args   = parser.parse_args()
+gen_ALL    = args.ALL
+gen_ERA_q  = args.ERA_q
+gen_ERA_uv = args.ERA_uv
+gen_VSF    = args.VSF
+gen_HOUGH  = args.HOUGH
+gen_COEF   = args.COEF
+rm_all     = args.rm_all
+#-----------------------------------------------------------------------------
+
+
+
+#-----------------------------------------------------------------------------
+# MANAGING TEST DATA BASED ON COMMAND LINE ARGS
+
+# Combinging non ALL and rm_all CLI arguments into dict
+
+manager_dict = { generate_test_ERA_q_data:  gen_ERA_q,
+                 generate_test_ERA_uv_data: gen_ERA_uv,
+                 generate_test_vsf_data:    gen_VSF,
+                 generate_test_hough_data:  gen_HOUGH,
+                 generate_test_coef_data:   gen_COEF
+}
+
+if gen_ALL == True:
+    for key in manager_dict:
+        manager_dict[key] = True
+
+if rm_all == True and any(manager_dict.values()):
+    print("ERROR: Conflicting command line args given.")
+    print("\tShouldn't generate and remove data at the same time.")
+
+elif rm_all == True:
+    remove_all_test_inputdata()
+
+elif rm_all == False and not any(manager_dict.values()):
+    print("ERROR: At least one Command line arg must be given.")
+
+else:
+    print("\nThe following test data files have been created:")
+    for key, val in manager_dict.items():
+        if val == True:
+            key()
+    print("")
+#-----------------------------------------------------------------------------
