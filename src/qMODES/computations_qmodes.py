@@ -110,17 +110,17 @@ def compute_qmodes(mode: str, date: str, k_lb: int, k_ub: int, ktot: int =None,
     # Main Loop
     for ilon in range(nlon):
                 
-        for kk in kvals:
+        for ik in range(len(kvals)):
 
             # k=0 term in Fourier expansion
-            if kk == 0:
-                q_mode[:,:,ilon] += qk_mode[0,kk,:,:]
+            if kvals[ik] == 0:
+                q_mode[:,:,ilon] += qk_mode[0,ik,:,:]
 
             # k!=0 terms
             else:
                 q_mode[:,:,ilon] += 2.0 * ( 
-                      qk_mode[0,kk,:,:] * np.cos(float(kk) * np.radians(lon[ilon])) 
-                    - qk_mode[1,kk,:,:] * np.sin(float(kk) * np.radians(lon[ilon])) 
+                      qk_mode[0,ik,:,:] * np.cos(float(kvals[ik]) * np.radians(lon[ilon])) 
+                    - qk_mode[1,ik,:,:] * np.sin(float(kvals[ik]) * np.radians(lon[ilon])) 
                     )
     
     # SAVING DATA TO NETCDF FILE
