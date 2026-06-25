@@ -7,9 +7,10 @@ from .computations_qmodes import *
 from .combine_qk import *
 from .combine_qmodes import *
 
+from .helpers import *
 from .data_readers import *
 from .standard_plot_parameters import *
-#from .test_data import * 
+
 
 
 # from .get_environment_variables import get_qMODES_INPUT_DATA_DIR, get_qMODES_OUTPUT_DATA_DIR, get_qMODES_TEST_INPUT_DATA_DIR, get_qMODES_TEST_OUTPUT_DATA_DIR
