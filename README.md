@@ -2,7 +2,7 @@
 
 ## UPDATE WARNING
 
-IMPORTANT NOTE!!! MUCH OF THE INFO IN THIS README FILE IS INCORRECT, AS MAJOR UPDATES ARE CURRENTLY UNDERWAY. THIS README WILL BE FULLY UPDATED SOON ONCE THE CHANGES HAVE BEEN COMPLETED.
+**IMPORTANT NOTE!!! MUCH OF THE INFO IN THIS README FILE IS INCORRECT, AS MAJOR UPDATES ARE CURRENTLY UNDERWAY. THIS README WILL BE FULLY UPDATED SOON ONCE THE CHANGES HAVE BEEN COMPLETED.**
 
 ## DESCRIPTION 
 
@@ -147,22 +147,22 @@ Currently the software is set up to only run the first timestep saved in any giv
 #### MODES Data
 If you would like to aquire the data that was used in the paper mentioned above the zenodo links are given below:
 
-> <https://doi.org/10.5281/zenodo.12726172>
-> <https://doi.org/10.5281/zenodo.12724196>
-> <https://doi.org/10.5281/zenodo.12749244>
-> <https://doi.org/10.5281/zenodo.12749316>
-> <https://doi.org/10.5281/zenodo.12749407>
-> <https://doi.org/10.5281/zenodo.12749482>
-> <https://doi.org/10.5281/zenodo.12751158>
-> <https://doi.org/10.5281/zenodo.12751242>
-> <https://doi.org/10.5281/zenodo.12751345>
-> <https://doi.org/10.5281/zenodo.12751416>
+> <https://doi.org/10.5281/zenodo.12726172>\
+> <https://doi.org/10.5281/zenodo.12724196>\
+> <https://doi.org/10.5281/zenodo.12749244>\
+> <https://doi.org/10.5281/zenodo.12749316>\
+> <https://doi.org/10.5281/zenodo.12749407>\
+> <https://doi.org/10.5281/zenodo.12749482>\
+> <https://doi.org/10.5281/zenodo.12751158>\
+> <https://doi.org/10.5281/zenodo.12751242>\
+> <https://doi.org/10.5281/zenodo.12751345>\
+> <https://doi.org/10.5281/zenodo.12751416>\
 
 To aquire additional MODES modal decomposition data you should contact the Zagar group at the University of Hamburg who created and maintains the MODES software package. The data you will need to acquire from them includes the vertical structure functions (VSF's), Hough functions and their associated frequencies, and the Hough coefficients. These data should then be stored in the following qMODES directories:
 
-> vertical structure functions (VSFs)--> input_data/MODES_data/vsf/
-> Hough functions and frequencies    --> input_data/MODES_data/hough/
-> Hough coefficients                 --> input_data/MODES_data/coef/
+> vertical structure functions (VSFs)--> input_data/MODES_data/vsf/ \
+> Hough functions and frequencies    --> input_data/MODES_data/hough/ \
+> Hough coefficients                 --> input_data/MODES_data/coef/ \
 
 NOTE: The hough function files and frequency files should BOTH be
 stored in the input_data/MODES_data/hough/ directory.
@@ -212,27 +212,24 @@ The liscense for the qMODES software package is a standard Creative Commons 1.0 
 
 ## CONTRIBUTORS 
 
-Bradley Kumm, PhD 
-University of Wisconsin - Madison
-bkumm at wisc dot edu or brkumm at gmail dot com
+Bradley Kumm, PhD \
+University of Wisconsin - Madison \
+bkumm at wisc dot edu or brkumm at gmail dot com 
 
-Valentino Neduhal
-University of Hamburg
-valentino dot neduhal at uni-hamburg dot de
+Valentino Neduhal \
+University of Hamburg \
+valentino dot neduhal at uni-hamburg dot de 
 
-Sam Stechmann, PhD
-University of Wisconsin - Madison
-stechmann at wisc dot edu
+Sam Stechmann, PhD \
+University of Wisconsin - Madison \
+stechmann at wisc dot edu 
 
-Nedjeljka Zagar, PhD
-University of Hamburg
-nedjeljka dot zagar at uni-hamburg dot de
+Nedjeljka Zagar, PhD \
+University of Hamburg \
+nedjeljka dot zagar at uni-hamburg dot de 
 
 ## ACKNOWLEDGEMENTS 
 
-Zagar Group and specifically, Nedjeljka Zagar and Valentino Neduhal
-For help obtaining the MODES software data which served as input to
-our qMODES package, and help with understanding this data, and also
-for their feedback and insights during this research project.
+Zagar Group and specifically, Nedjeljka Zagar and Valentino Neduhal for all of their help producing obtaining and understanding the MODES software data which served as input to our qMODES package, and help with understanding this data, and also for their feedback and insights during this research project.
 
 ECMWF for producing and distributing the ERA5 reanalysis data sets.
