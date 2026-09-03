@@ -1,7 +1,12 @@
+#-----------------------------------------------------------------------------
 from qMODES import qMODES_deriv, qMODES_deriv_at_point
 
 import pytest
+#-----------------------------------------------------------------------------
 
+
+
+#-----------------------------------------------------------------------------
 def test_qMODES_deriv_at_point():
         
     # simple quadratic (x^2 + 3x) should give 
@@ -40,3 +45,4 @@ def test_qMODES_deriv():
         qMODES_deriv([0, 0, 2], [0, 4, 10]) # repeat first two x-vals
     with pytest.raises(ZeroDivisionError, match="Repeated x-values causes ZeroDivisionError"):
         qMODES_deriv([0, 1, 1], [0, 4, 10]) # repeat last two x-vals
+#-----------------------------------------------------------------------------
