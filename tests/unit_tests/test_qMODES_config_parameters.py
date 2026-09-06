@@ -29,6 +29,3 @@ def test_load_qmodes_config():
     assert os.path.exists( config.get_default_data_dir("vsf_int"))
     assert os.path.exists( config.get_default_data_dir("qk"))
     assert os.path.exists( config.get_default_data_dir("qmodes"))
-
-config = load_qmodes_config(f"{get_QMODES_REPO_DIR()}/tests/config_test.yaml")
-print(config.get_default_data_dir("ERA"))
