@@ -52,7 +52,7 @@ class qMODES_config_parameters:
         """
 
         data_type_to_dict_map = {
-            "ERA": f"{self.input_data_dir}/ERA_data/ERA/",
+            "ERA": f"{self.input_data_dir}/ERA_data/",
             "coef": f"{self.input_data_dir}/MODES_data/coef/",
             "hough": f"{self.input_data_dir}/MODES_data/hough/",
             "freq": f"{self.input_data_dir}/MODES_data/hough/",
@@ -84,7 +84,6 @@ def load_qmodes_config(file_path: str) -> qMODES_config_parameters:
         config_dict = yaml.safe_load(f)
         
     # The ** operator unpacks the dictionary.
-    print(config_dict)
     return qMODES_config_parameters(**config_dict)
 
 #-----------------------------------------------------------------------------
