@@ -1,2 +1,47 @@
+#----------------------------------------------------#
+# Ignore data files in the data directory
+# but keep the input_data and output_data directories
+# and their .gitkeep files
+#----------------------------------------------------#
+*data/*
+!/data/input_data/
+!/data/output_data/
+/data/input_data/*
+!/data/input_data/.gitkeep
+/data/output_data/*
+!/data/output_data/.gitkeep
+
+#----------------------------------------------------#
+# Ignore all run directories except for the demo 
+# directory and its contents.
+#----------------------------------------------------#
+/run/*
+!/run/run_demo/
+!/run/run_demo/*
+
+#----------------------------------------------------#
+# Ignore everything in the plots directory 
+#----------------------------------------------------#
+/plots/*
+
+#----------------------------------------------------#
+# Misc directories and files
+#----------------------------------------------------#
 **/__pycache__/
 **/.DS_Store
+
+#----------------------------------------------------#
+# Ignore all files in the tests/test_data directory 
+# except for the .gitkeep file. Use the 
+# test_data_manager.py script to manage and
+# generate the test data files.
+#----------------------------------------------------#
+/tests/test_data/*
+!/tests/test_data/.gitkeep
+
+#----------------------------------------------------#
+# Ignore the contents of notebooks except for the 
+# .gitkeep file.
+#----------------------------------------------------#
+/notebooks/*
+!/notebooks/.gitkeep
