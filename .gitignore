@@ -28,12 +28,6 @@
 !/plots/plotting_scripts/*
 
 #----------------------------------------------------#
-# Misc directories and files
-#----------------------------------------------------#
-**/__pycache__/
-**/.DS_Store
-
-#----------------------------------------------------#
 # Ignore all files in the tests/test_data directory 
 # except for the .gitkeep file. Use the 
 # test_data_manager.py script to manage and
@@ -48,3 +42,10 @@
 #----------------------------------------------------#
 /notebooks/*
 !/notebooks/.gitkeep
+
+#----------------------------------------------------#
+# Misc directories and files
+#----------------------------------------------------#
+**/__pycache__/
+**/.DS_Store
+*.swp
