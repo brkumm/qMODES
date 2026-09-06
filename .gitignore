@@ -20,9 +20,12 @@
 !/run/run_demo/*
 
 #----------------------------------------------------#
-# Ignore everything in the plots directory 
+# Ignore everything in the plots directory except for 
+# the plotting_scripts directory and its contents.
 #----------------------------------------------------#
 /plots/*
+!/plots/plotting_scripts/
+!/plots/plotting_scripts/*
 
 #----------------------------------------------------#
 # Misc directories and files
