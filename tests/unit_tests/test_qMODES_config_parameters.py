@@ -1,7 +1,14 @@
+#-----------------------------------------------------------------------------
+# IMPORTS
 from qMODES import load_qmodes_config, get_QMODES_REPO_DIR
 
 import os
+#-----------------------------------------------------------------------------
 
+
+
+#-----------------------------------------------------------------------------
+# PYTEST FUNCTIONS FOR UNIT TESTING
 def test_load_qmodes_config():
     # Load the configuration from the YAML file
     config = load_qmodes_config(f"{get_QMODES_REPO_DIR()}/tests/config_test.yaml")
@@ -29,3 +36,4 @@ def test_load_qmodes_config():
     assert os.path.exists( config.get_default_data_dir("vsf_int"))
     assert os.path.exists( config.get_default_data_dir("qk"))
     assert os.path.exists( config.get_default_data_dir("qmodes"))
+#-----------------------------------------------------------------------------
