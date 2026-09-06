@@ -1,0 +1,17 @@
+#run_paths:
+input_data_dir: "runs/run_demo/input_data/"   # Relative path with root of QMODES_REPO_DIR environment variable
+output_data_dir: "runs/run_demo/output_data/" # Relative path with root of QMODES_REPO_DIR environment variable
+
+# grid_parameters:
+nplev: 137 # number of pressure levels
+nlat: 640  # number of latitude values
+nlon: 1280 # number of longitude values
+
+# mode_parameters:
+nK: 351 # number of zonal modes
+nM: 60  # number of vertical modes
+nN: 200 # number of meridional modes
+
+# physical_constants:
+ps0: 101325 # Pressure at bottom of atmospheric grid in Pa
+Omega: 7.2722e-05 # Rotation rate of the earth in rad/sec
