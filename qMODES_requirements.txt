@@ -16,6 +16,7 @@ fsspec==2026.3.0
 h5netcdf==1.8.1
 h5py==3.16.0
 idna==3.11
+iniconfig==2.3.0
 kiwisolver==1.5.0
 locket==1.0.0
 matplotlib==3.10.8
@@ -26,9 +27,12 @@ packaging==26.0
 pandas==3.0.2
 partd==1.4.2
 pillow==12.2.0
+pluggy==1.6.0
+Pygments==2.21.0
 pyparsing==3.3.2
 pyproj==3.7.2
 pyshp==3.0.3
+pytest==9.1.1
 python-dateutil==2.9.0.post0
 pytz==2026.1.post1
 PyYAML==6.0.3
