@@ -3,44 +3,44 @@
 # but keep the input_data and output_data directories
 # and their .gitkeep files
 #----------------------------------------------------#
-*data/*
-!/data/input_data/
-!/data/output_data/
-/data/input_data/*
+/data/**
 !/data/input_data/.gitkeep
-/data/output_data/*
 !/data/output_data/.gitkeep
 
 #----------------------------------------------------#
 # Ignore all run directories except for the demo 
 # directory and its contents.
 #----------------------------------------------------#
-/run/*
-!/run/run_demo/
-!/run/run_demo/*
+/run/**
+!/run/run_demo/**
 
 #----------------------------------------------------#
 # Ignore everything in the plots directory except for 
 # the plotting_scripts directory and its contents.
 #----------------------------------------------------#
-/plots/*
-!/plots/plotting_scripts/
-!/plots/plotting_scripts/*
+/plots/**
+!/plots/plotting_scripts/**
 
 #----------------------------------------------------#
 # Ignore all files in the tests/test_data directory 
-# except for the .gitkeep file. Use the 
-# test_data_manager.py script to manage and
-# generate the test data files.
+# except for the .gitkeep files in the base 
+# directories. Use the test_data_manager.py script 
+# to manage and generate the test data files.
 #----------------------------------------------------#
-/tests/test_data/*
+/tests/test_data/**
 !/tests/test_data/.gitkeep
+!/tests/test_data/test_input_data/ERA_data/.gitkeep
+!/tests/test_data/test_input_data/MODES_data/coef/.gitkeep
+!/tests/test_data/test_input_data/MODES_data/hough/.gitkeep
+!/tests/test_data/test_input_data/MODES_data/vsf/.gitkeep
+!/tests/test_data/test_output_data/qk_data/.gitkeep
+!/tests/test_data/test_output_data/qmodes_data/.gitkeep
 
 #----------------------------------------------------#
 # Ignore the contents of notebooks except for the 
 # .gitkeep file.
 #----------------------------------------------------#
-/notebooks/*
+/notebooks/**
 !/notebooks/.gitkeep
 
 #----------------------------------------------------#
