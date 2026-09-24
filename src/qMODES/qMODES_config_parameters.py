@@ -1,7 +1,6 @@
 #-----------------------------------------------------------------------------
 # IMPORTS
 import os
-from datetime import datetime
 
 from dataclasses import dataclass
 import yaml
