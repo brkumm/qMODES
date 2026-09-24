@@ -1,25 +1,10 @@
-#-----------------------------------------------------------------------------
-# File:          computations_vsf_int.py
-# Author:        Bradley Kumm (brkumm@gmail.com)
-# Last Modified: 2026/05/14 (YYYY/MM/DD)
-# Description:   Various functions used to compute the integrated Vertical
-#                Structure Function (VSF) values from an input VSF data file.
-#
-# Notes:         
-#               
-#------------------------------------------------------------------------------
-
-
-
 #------------------------------------------------------------------------------
 # IMPORTS
-from .get_environment_variables import get_QMODES_INPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE, get_QMODES_PARAMETERS_FILE
-from .templates    import template_vsf_fname, template_vsf_int_fname
-
-import yaml 
 import numpy    as np
 import xarray   as xa
 from   datetime import datetime
+
+from .qMODES_config_parameters import load_qmodes_config
 #------------------------------------------------------------------------------
 
 
@@ -27,22 +12,21 @@ from   datetime import datetime
 #------------------------------------------------------------------------------
 #MAIN COMPUTATION OF INTEGRATED VERTICAL STRUCTURE FUNCTION 
 
-def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(),
-                    parameter_file: str =get_QMODES_PARAMETERS_FILE(), 
-                    author_name: str =None, author_email: str =None) -> None:
+def compute_vsf_int(config_file:str, author_name: str =None, 
+                    author_email: str =None) -> None:
     """
     Function that computes the integrated vertical structure function (VSF)
-    values, which are computed as:
+    values. These are computed as follows.
 
     vsf_int(p;m) = int_0^p vsf(p';m) dp'
 
     The integration is performed using an averaging of the left and right 
     riemannan sums. Previously this was doneusing simpsons method, but this
-    is the method used bythe Zagar group so I switched to their method for
-    consistancy.
+    is the method used by the Zagar group so their method is 
+    used for consistency.
 
     REQUIRED INPUTS:
-        
+        config_file: path to the config file for this particular run.
 
     OPTIONAL INPUTS:
         author_name: name of author (stored in outputfile metadata)
@@ -51,26 +35,31 @@ def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(),
     """
 
     #-------------------- Setting Computation Parameters --------------------
-    # Input and output files
-    vsf_infile  = template_vsf_fname(input_data_dir)
-    output_file = template_vsf_int_fname(input_data_dir)
+    # Reading in parameters from config_file
+    config_params = load_qmodes_config(config_file)
 
-    # Reading in values from parameters file
-    with open(parameter_file, 'r') as param_file:
-        params = yaml.safe_load(param_file)
+    # extracting relavent values from the config file data
+    ps0 = config_params.ps0
+    vsf_infile = config_params.get_default_file_path("vsf_fname")
+    output_file = config_params.get_default_file_path("vsf_int_fname")
 
-    ps0 = params['physical_constants']['ps0']
+    # Reading in values from the vsf data file
+    vsf_ds = xa.open_dataset(vsf_infile)
+    vsf = vsf_ds["vsf"].values
+    vgrid = vsf_ds["vgrid"].values
+    mp = len(vgrid)
+    num_vmode = vsf_ds.sizes["num_vmode"]
 
-    # reading in vsf data
-    vsf_ds     = xa.open_dataset(vsf_infile)
-    vsf        = vsf_ds["vsf"].values
-    vgrid      = vsf_ds["vgrid"].values
-    mp         = len(vgrid)
-    nM         = vsf_ds.sizes["num_vmode"]
+    # Print warning if data file parameters don't match with values in config file.
+    if mp != config_params.nplev:
+        print(f"WARNING!!!: Number of pressure levels in data file (mp={mp}) does NOT match value specified in the config file (nplev={config_params.nplev})")
+    if num_vmode != config_params.nM:
+        print(f"WARNING!!!: Number of vertical modes in data file (num_vmode={num_vmode}) does NOT match value specified in the config file (nM={config_params.nM})")
+
     #------------------------------- Main Loop -------------------------------
 
     #Initializing vsfint array
-    vsfint_temp = np.zeros([nM,mp+1]) #Allocation of matrix that will contain all integrals for all vertical modes
+    vsfint_temp = np.zeros([num_vmode,mp+1]) #Allocation of matrix that will contain all integrals for all vertical modes
 
     dz = np.zeros(mp + 1)
     
@@ -82,12 +71,11 @@ def compute_vsf_int(input_data_dir: str =get_QMODES_INPUT_DATA_DIR(),
     
     for k in range(1, mp + 1):
         dp = 0.5 * (dz[mp - k] + dz[mp + 1 - k])
-        for m in range(0, nM):
+        for m in range(0, num_vmode):
             vsfint_temp[m, k] = vsfint_temp[m, k - 1] + vsf[m, mp - k] * dp
     
     vsf_int = vsfint_temp[:, 1:] #
-    vmodes  = np.array([i for i in range(nM)])
-
+    vmodes  = np.array([i for i in range(num_vmode)])
 
     #-------------------- Saving vsf_int Values to output_file -------------------
 

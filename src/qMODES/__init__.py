@@ -1,11 +1,13 @@
 from .get_environment_variables import * 
 from .qMODES_config_parameters  import *
 from .math_util                 import *
-#from .templates                 import *
-
-# from .computations_vsf_int import *
+from .qMODES_config_parameters import *
+from .computations_vsf_int import *
 # from .computations_qk import *
 # from .computations_qmodes import *
+
+
+#from .templates                 import *
 # from .combine_qk import *
 # from .combine_qmodes import *
 #
