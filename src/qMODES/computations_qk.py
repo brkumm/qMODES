@@ -1,26 +1,10 @@
 #-----------------------------------------------------------------------------
-# File:          computations_qk.py
-# Author:        Bradley Kumm (brkumm@gmail.com)
-# Last Modified: 2026/04/15 (YYYY/MM/DD)
-# Description:   Functions used to compute the qk (meridional Fourier
-#                component) values. See Kumm et al. 2026 (currently in review)
-#                paper for equations relavent to the computations.
-#
-# Notes:         
-#               
-#-----------------------------------------------------------------------------
-
-
-
-#-----------------------------------------------------------------------------
 # IMPORTS
-from .get_environment_variables import get_QMODES_INPUT_DATA_DIR, get_QMODES_OUTPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
-from .templates import template_vsf_int_fname, template_hough_fname, template_coef_fname, template_qk_with_klb_kub_ktot_fname
-
-import yaml
 import numpy as np
 import xarray as xa
 from datetime import datetime
+
+from .qMODES_config_parameters import load_qmodes_config
 
 #-----------------------------------------------------------------------------
 
@@ -29,10 +13,8 @@ from datetime import datetime
 #-----------------------------------------------------------------------------
 # MAIN COMPUTATION OF qk VALUES
 
-def compute_qk(mode: str, date: str, k_lb: int, k_ub: int, ktot: int = None, 
-               input_data_dir: str = get_QMODES_INPUT_DATA_DIR(), 
-               output_data_dir: str = get_QMODES_OUTPUT_DATA_DIR(), 
-               parameter_file: str = get_QMODES_PARAMETERS_FILE(), 
+def compute_qk(mode: str, date: str, k_lb: int,
+               k_ub: int, ktot: int, config_file: str, 
                author_name: str = None, author_email: str = None) -> None:
     """
     Function that computes longitudnal fourier components for moisture 
@@ -67,43 +49,42 @@ def compute_qk(mode: str, date: str, k_lb: int, k_ub: int, ktot: int = None,
         to see how this is done.  
 
     """
-    #---------- Opening parameters file ----------
-    with open(parameter_file, 'r') as param_file:
-        params = yaml.safe_load(param_file)
+    #---------- Retrieving config file params ----------
+    config_params = load_qmodes_config(config_file)
 
     #---------- Input Checks ----------
     if mode not in ["EIG", "WIG", "BAL"]:
-        print("EXITING: 'mode' value must be EIG, WIG, or BAL")
-        exit()
-
-    if ktot == None:
-        ktot = params['mode_parameters']['nK']
+        raise ValueError(f"Invalid input for 'mode' variable ({mode}). Valid values are 'EIG', 'WIG', or 'BAL'.")
 
     #---------- Initial Calcs ----------
-    vsf_int_infile = template_vsf_int_fname(input_data_dir)
-    coef_infile    = template_coef_fname(input_data_dir, date)
+    if ktot == None:
+        ktot = config_params.nK
+
+    vsf_int_infile = config_params.get_default_file_path('vsf_int')
+    coef_infile    = config_params.get_default_file_path('coef', date)
 
     k_lb_str = "0"*(3-len(str(k_lb))) + str(k_lb)
     k_ub_str = "0"*(3-len(str(k_ub))) + str(k_ub)
     ktot_str = "0"*(3-len(str(ktot))) + str(ktot)
 
-    outfile = template_qk_with_klb_kub_ktot_fname(output_data_dir, date, 
-                                                  k_lb_str, k_ub_str, 
-                                                  ktot_str)
+    outfile = config_params.get_default_file_path('qk', date, None, k_lb_str, k_ub_str, ktot_str)
 
     kvals = [i for i in range(k_lb, k_ub+1)]
 
     #---------- Reading in data that is constant over the loop ----------
     # grid data
-    nplev = params['grid_parameters']['nplev']
-    nlat  = params['grid_parameters']['nlat']
+    nplev = config_params.nplev
+    nlat  = config_params.nlat
 
-    sample_gird_ds = xa.open_dataset(params['sample_files']['grid_file'])
+    # use first file hough file with k=klb  
+    # to retrieve the latitude values.
+    sample_grid_file = config_params.get_default_file_path('hough', None, k_lb_str, None, None, None)
+    sample_gird_ds = xa.open_dataset(sample_grid_file)
     lat = sample_gird_ds["lat"].values
 
     # mode index data
-    nM = params['mode_parameters']['nM']
-    nN = params['mode_parameters']['nN']
+    nM = config_params.nM
+    nN = config_params.nN
 
     # hough_coef data
     coef_ds = xa.open_dataset(coef_infile)
@@ -132,7 +113,7 @@ def compute_qk(mode: str, date: str, k_lb: int, k_ub: int, ktot: int = None,
         
         # Read in Hough Function data
         kstr         = "0"*(3-len(str(kk)))+str(kk)
-        hough_infile = template_hough_fname(input_data_dir, kstr)
+        hough_infile = config_params.get_default_file_path("hough", None, kstr, None, None, None)
         hough_ds     = xa.open_dataset(hough_infile)
         hough        = hough_ds[f"{mode}"].values
     
