@@ -82,7 +82,9 @@ class qMODES_config_parameters:
         return os.path.normpath(data_type_to_dict_map[data_type])
     
 
-    def get_default_file_path(self, file_type: str, date: str, k_str: str, klb_str: str, kub_str: str, ktot_str: str) -> str:
+    def get_default_file_path(self, file_type: str, date: str = None, 
+                              k_str: str = None, klb_str: str = None, 
+                              kub_str: str = None, ktot_str: str = None) -> str:
         """
         Returns the path (default convention) to a file for a given file 
         type, and additional arguments (depending on the file type).
@@ -90,8 +92,12 @@ class qMODES_config_parameters:
         
         Valid inputs (as a string) for the  file types variable are: 
             ERA_q_fname, ERA_uv_fname, vsf_fname, 
-            vsf_int_fname, hough_fname, coef_fname, 
-            freq_fname, qk_fname, qmodes_fname.
+            vsf_int_fname
+            hough_fname
+            coef_fname
+            freq_fname
+            qk_fname
+            qmodes_fname
 
         Additional inputs (depending on the file type) are:
             date: date in YYYYMMDD format as a string.
@@ -115,7 +121,7 @@ class qMODES_config_parameters:
         
         # Input checks
         if file_type not in file_type_to_path_dict:
-            raise ValueError(f"Invalid input for file_type variable. Valid inputs are: {' '.join(file_type_to_path_dict.keys())}")
+            raise ValueError(f"Invalid input for file_type variable. Valid inputs are: {'\n\t'.join(file_type_to_path_dict.keys())}")
 
         elif file_type in ["ERA_q_fname", "ERA_uv_fname", "coef_fname"] and not isinstance(date, str):
             raise ValueError(f"{file_type} file_type requires the following input variables:\'date\'.")
