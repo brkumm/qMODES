@@ -11,11 +11,11 @@
 # Ignore all run directories except for the demo 
 # directory and its contents.
 #----------------------------------------------------#
-/run/**
-!/run/run_demo/config_demo.yaml
-!/run/run_demo/input_data_demo
-!/run/run_demo/output_data_demo
-!/run/run_demo/submit_job_demo.sh
+/runs/**
+!/runs/run_demo/config_demo.yaml
+!/runs/run_demo/input_data_demo
+!/runs/run_demo/output_data_demo
+!/runs/run_demo/submit_job_demo.sh
 
 #----------------------------------------------------#
 # Ignore everything in the plots directory except for 
