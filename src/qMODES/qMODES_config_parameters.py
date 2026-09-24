@@ -125,7 +125,7 @@ class qMODES_config_parameters:
         return os.path.normpath(file_type_to_path_dict[file_type])
 
 
-    def get_default_file_pattern(pattern_type: str, date: str, ktot_str: str) -> str:
+    def get_default_file_pattern(self, pattern_type: str, date: str, ktot_str: str) -> str:
         """
         Returns the default file pattern for a given pattern type, date, and ktot value 
         NOTE: 
