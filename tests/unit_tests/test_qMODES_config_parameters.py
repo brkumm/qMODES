@@ -61,16 +61,18 @@ def test_load_qmodes_config():
     assert os.path.isfile( config.get_default_file_path("vsf_int_fname") )
     assert os.path.isfile( config.get_default_file_path("hough_fname")   )
     assert os.path.isfile( config.get_default_file_path("freq_fname")    )
-    assert os.path.isfile( config.get_default_file_path("qk_fname")      )
-    assert os.path.isfile( config.get_default_file_path("qmodes_fname")  )
 
-    # Chaeck that the get_default_file_pattern method returns a correct 
-    # pattern for each valid pattern_type input value.
 
-###### Optional tests to run after running qk and qmodes calculations on the test data.
-#    # Double not operation on list returns true if list is not empty
+#    # Check that the get_default_file_pattern method returns a correct 
+#    # These checks should be ignored unless you have already performed the  
+#    # qk and qmodes computations for the test input data. 
+#    # For this reason these tests will be commented out by default.
+#
+#    assert os.path.isfile( config.get_default_file_path("qk_fname")      )
+#    assert os.path.isfile( config.get_default_file_path("qmodes_fname")  )
+#
+#    # "not not list" is a quick method to check if a list is empty
 #    assert not not glob.glob( config.get_default_file_pattern( "qk_file_pattern")     )
 #    assert not not glob.glob( config.get_default_file_pattern( "qmodes_file_pattern") )
-
 
 #-----------------------------------------------------------------------------
