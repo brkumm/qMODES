@@ -19,4 +19,4 @@ nN: 200 # number of meridional modes
 
 # physical_constants:
 ps0: 101325 # Pressure at bottom of atmospheric grid in Pa
-Omega: 7.2722e-05 # Rotation rate of the earth in rad/sec
+omega: 7.2722e-05 # Rotation rate of the earth in rad/sec
