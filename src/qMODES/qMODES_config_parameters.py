@@ -91,13 +91,15 @@ class qMODES_config_parameters:
         NOTE(S): 
         
         Valid inputs (as a string) for the  file types variable are: 
-            ERA_q_fname, ERA_uv_fname, vsf_fname, 
-            vsf_int_fname
-            hough_fname
-            coef_fname
-            freq_fname
-            qk_fname
-            qmodes_fname
+            ERA_q
+            ERA_uv
+            vsf
+            vsf_int
+            hough
+            coef
+            freq
+            qk
+            qmodes
 
         Additional inputs (depending on the file type) are:
             date: date in YYYYMMDD format as a string.
@@ -108,28 +110,28 @@ class qMODES_config_parameters:
         """
 
         file_type_to_path_dict = {
-                    "ERA_q_fname": f"{self.input_data_dir}/ERA_data/ERA5_{date}_q-t_pl_data.nc",
-                    "ERA_uv_fname": f"{self.input_data_dir}/ERA_data/ERA5_{date}_u-v_pl_data.nc",
-                    "coef_fname": f"{self.input_data_dir}/MODES_data/coef/Hough_coeff_M60_F320_{date}0000000.nc",
-                    "vsf_fname": f"{self.input_data_dir}/MODES_data/vsf/vsf.data.nc",
-                    "vsf_int_fname": f"{self.input_data_dir}/MODES_data/vsf/vsf_int.data.nc",
-                    "hough_fname": f"{self.input_data_dir}/MODES_data/hough/hough_F320_M60.wn00{k_str}.nc",
-                    "freq_fname": f"{self.input_data_dir}/MODES_data/hough/freq_F320_{k_str}0000000.nc",
-                    "qk_fname": f"{self.output_data_dir}/qk_data/qk_{date}0000000_klb-{klb_str}_kub-{kub_str}_ktot-{ktot_str}.nc",
-                    "qmodes_fname": f"{self.output_data_dir}/qmodes_data/qmodes_{date}0000000_klb-{klb_str}_kub-{kub_str}_ktot-{ktot_str}.nc"
+                    "ERA_q": f"{self.input_data_dir}/ERA_data/ERA5_{date}_q-t_pl_data.nc",
+                    "ERA_uv": f"{self.input_data_dir}/ERA_data/ERA5_{date}_u-v_pl_data.nc",
+                    "coef": f"{self.input_data_dir}/MODES_data/coef/Hough_coeff_M60_F320_{date}0000000.nc",
+                    "vsf": f"{self.input_data_dir}/MODES_data/vsf/vsf.data.nc",
+                    "vsf_int": f"{self.input_data_dir}/MODES_data/vsf/vsf_int.data.nc",
+                    "hough": f"{self.input_data_dir}/MODES_data/hough/hough_F320_M60.wn00{k_str}.nc",
+                    "freq": f"{self.input_data_dir}/MODES_data/hough/freq_F320_{k_str}0000000.nc",
+                    "qk": f"{self.output_data_dir}/qk_data/qk_{date}0000000_klb-{klb_str}_kub-{kub_str}_ktot-{ktot_str}.nc",
+                    "qmodes": f"{self.output_data_dir}/qmodes_data/qmodes_{date}0000000_klb-{klb_str}_kub-{kub_str}_ktot-{ktot_str}.nc"
                 }
         
         # Input checks
         if file_type not in file_type_to_path_dict:
             raise ValueError(f"Invalid input for file_type variable. Valid inputs are: {'\n\t'.join(file_type_to_path_dict.keys())}")
 
-        elif file_type in ["ERA_q_fname", "ERA_uv_fname", "coef_fname"] and not isinstance(date, str):
+        elif file_type in ["ERA_q", "ERA_uv", "coef"] and not isinstance(date, str):
             raise ValueError(f"{file_type} file_type requires the following input variables:\'date\'.")
         
-        elif file_type in ["hough_fname", "freq_fname"] and not isinstance(k_str, str):
+        elif file_type in ["hough", "freq"] and not isinstance(k_str, str):
             raise ValueError(f"{file_type} file_type requires the following input variables:\'k_str\'.")
         
-        elif file_type in ["qk_fname", "qmodes_fname"] and ( None in [date, klb_str, kub_str, ktot_str] ):
+        elif file_type in ["qk", "qmodes"] and ( None in [date, klb_str, kub_str, ktot_str] ):
             raise ValueError(f"{file_type} file_type requires the following input variables: \'date\', \'klb_str\', \'kub_str\', \'ktot_str\'.")
 
         # return cleaned up string
