@@ -50,8 +50,14 @@ class qMODES_config_parameters:
         Returns the qMODES default directory location for various model inputs and outputs using the input_data_dir and output_data_dir values.
         
         Valid inputs for 'data_type' string are: 
-            'ERA','coef', 'hough', 'freq', 'vsf', 
-            'vsf_int', 'qk', 'qmodes'.
+            ERA
+            coef
+            hough
+            freq
+            vsf 
+            vsf_int
+            qk
+            qmodes
         
         All other inputs will raise a ValueError.
         NOTE: By default the frequency (freq) data is stored hough directory, and vsf_int data is stored vsf directory.
