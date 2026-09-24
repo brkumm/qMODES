@@ -2,6 +2,11 @@
 input_data_dir: "runs/run_demo/input_data/"   # Relative path with root of QMODES_REPO_DIR environment variable
 output_data_dir: "runs/run_demo/output_data/" # Relative path with root of QMODES_REPO_DIR environment variable
 
+# time parameters
+t_start: '20010101' # start date in YYYYMMDD format
+delta_t: 1 # time step in days
+nT: 1 # number of time steps
+
 # grid_parameters:
 nplev: 137 # number of pressure levels
 nlat: 640  # number of latitude values

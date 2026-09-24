@@ -1,6 +1,11 @@
 #run_paths:
-input_data_dir: "tests/test_data/test_input_data/"   # Relative path with root of QMODES_REPO_DIR environment variable
-output_data_dir: "tests/test_data/test_output_data/" # Relative path with root of QMODES_REPO_DIR environment variable
+input_data_dir: "tests/test_data/test_input_data/"   # Relative path from QMODES_REPO_DIR environment variable
+output_data_dir: "tests/test_data/test_output_data/" # Relative path from QMODES_REPO_DIR environment variable
+
+# time parameters
+t_start: '20010101' # start date in YYYYMMDD format
+delta_t: 1 # time increase in days
+nT: 1 # number of time steps
 
 # grid_parameters:
 nplev: 11 # number of pressure levels
@@ -14,4 +19,4 @@ nN: 5 # number of meridional modes
 
 # physical_constants:
 ps0: 101325 # Pressure at bottom of atmospheric grid
-Omega: 7.2722e-05 # Rotation rate of the earth
+omega: 7.2722e-05 # Rotation rate of the earth
