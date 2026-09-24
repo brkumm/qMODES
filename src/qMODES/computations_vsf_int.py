@@ -40,8 +40,8 @@ def compute_vsf_int(config_file:str, author_name: str =None,
 
     # extracting relavent values from the config file data
     ps0 = config_params.ps0
-    vsf_infile = config_params.get_default_file_path("vsf_fname")
-    output_file = config_params.get_default_file_path("vsf_int_fname")
+    vsf_infile = config_params.get_default_file_path("vsf")
+    output_file = config_params.get_default_file_path("vsf_int")
 
     # Reading in values from the vsf data file
     vsf_ds = xa.open_dataset(vsf_infile)
