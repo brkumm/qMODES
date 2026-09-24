@@ -12,7 +12,10 @@
 # directory and its contents.
 #----------------------------------------------------#
 /run/**
-!/run/run_demo/**
+!/run/run_demo/config_demo.yaml
+!/run/run_demo/input_data_demo
+!/run/run_demo/output_data_demo
+!/run/run_demo/submit_job_demo.sh
 
 #----------------------------------------------------#
 # Ignore everything in the plots directory except for 
@@ -46,6 +49,7 @@
 #----------------------------------------------------#
 # Misc directories and files
 #----------------------------------------------------#
+/qMODES_venv/
 **/__pycache__/
 **/.DS_Store
 *.swp
