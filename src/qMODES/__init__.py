@@ -4,7 +4,7 @@ from .math_util                 import *
 from .qMODES_config_parameters import *
 from .computations_vsf_int import *
 from .computations_qk import *
-# from .computations_qmodes import *
+from .computations_qmodes import *
 
 
 #from .templates                 import *

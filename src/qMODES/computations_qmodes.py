@@ -1,25 +1,11 @@
-#-----------------------------------------------------------------------------
-# File:          computations_qmodes.py
-# Author:        Bradley Kumm (brkumm@gmail.com)
-# Last Modified: 2026/05/16 (YYYY/MM/DD)
-# Description:   Main function used to compute the EIG, WIG, BAL/ROT and M 
-#                modal moisture values.
-#
-# Notes:         
-#               
-#------------------------------------------------------------------------------
-
-
-
 #------------------------------------------------------------------------------
 # IMPORTS
-from .get_environment_variables import get_QMODES_OUTPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
-from .templates    import template_qk_fname, template_qmodes_with_klb_kub_ktot_fname
-
 import yaml
 import numpy    as np
 import xarray   as xa
 from   datetime import datetime
+
+from .qMODES_config_parameters import load_qmodes_config
 
 #------------------------------------------------------------------------------
 
@@ -28,9 +14,8 @@ from   datetime import datetime
 #--------------------------------------------------------------------------
 # MAIN COMPUTATION OF qmodes VALUES
 
-def compute_qmodes(mode: str, date: str, k_lb: int, k_ub: int, ktot: int =None, 
-                   output_data_dir: str = get_QMODES_OUTPUT_DATA_DIR(),
-                   parameter_file: str = get_QMODES_PARAMETERS_FILE(),
+def compute_qmodes(mode: str, date: str, k_lb: int, k_ub: int, ktot: int,
+                   config_file: str,
                    author_name: str =None, author_email: str =None):
     """
     Function that computes the moisture modal values from the qk 
@@ -64,33 +49,34 @@ def compute_qmodes(mode: str, date: str, k_lb: int, k_ub: int, ktot: int =None,
         to see how this is done. 
     """
     #---------- Opening parameters file ----------
-    with open(parameter_file, 'r') as param_file:
-        params = yaml.safe_load(param_file)
+    config_params = load_qmodes_config(config_file)
+    #with open(parameter_file, 'r') as param_file:
+    #    params = yaml.safe_load(param_file)
     
     #---------- Input Checks ----------
     if mode not in ["EIG", "WIG", "BAL"]:
-        print("EXITING: --mode command line flag must be EIG, WIG, or BAL")
-        exit()
-    
+        raise ValueError(f"Invalid input for 'mode' variable ({mode}). Valid values are 'EIG', 'WIG', or 'BAL'.")
+
+    #---------- Initial Variable Setup ----------
     if ktot == None:
         ktot = params['mode_parameters']['nK']
 
-    #---------- Initial Variable Setup ----------
-    nplev = params['grid_parameters']['nplev']
-    nlat  = params['grid_parameters']['nlat']
-    nlon  = params['grid_parameters']['nlon']
+    nplev = config_params.nplev
+    nlat  = config_params.nlat
+    nlon  = config_params.nlon
 
     klb_str = "0"*(3-len(str(k_lb)))  + str(k_lb)
     kub_str = "0"*(3-len(str(k_ub)))  + str(k_ub)
     ktot_str = "0"*(3-len(str(ktot))) + str(ktot)
 
     kvals     = np.array( [i for i in range(k_lb, k_ub+1)] )
-    grid_file = params['sample_files']['grid_file']
-    qk_infile = template_qk_fname(output_data_dir, date, klb_str, kub_str, 
-                                  ktot_str)
-    outfile   = template_qmodes_with_klb_kub_ktot_fname(output_data_dir, date,
-                                                        klb_str, kub_str,
-                                                        ktot_str)
+    grid_file = config_params.get_default_file_path('ERA_q', date)
+
+    qk_infile = config_params.get_default_file_path('qk', date, None, klb_str, 
+                                                    kub_str, ktot_str)
+    
+    outfile = config_params.get_default_file_path('qmodes', date, None, klb_str, 
+                                                  kub_str, ktot_str)
 
     #---------- Reading Input Data --------
     grid_ds = xa.open_dataset(grid_file)
@@ -119,8 +105,8 @@ def compute_qmodes(mode: str, date: str, k_lb: int, k_ub: int, ktot: int =None,
             # k!=0 terms
             else:
                 q_mode[:,:,ilon] += 2.0 * ( 
-                      qk_mode[0,kk,:,:] * np.cos(float(kk) * np.radians(lon[ilon])) 
-                    - qk_mode[1,kk,:,:] * np.sin(float(kk) * np.radians(lon[ilon])) 
+                      qk_mode[0,kk-k_lb,:,:] * np.cos(float(kk) * np.radians(lon[ilon])) 
+                    - qk_mode[1,kk-k_lb,:,:] * np.sin(float(kk) * np.radians(lon[ilon])) 
                     )
     
     # SAVING DATA TO NETCDF FILE
