@@ -52,6 +52,7 @@
 # Misc directories and files
 #----------------------------------------------------#
 /*venv*/
+.venv
 **/__pycache__/
 **/.DS_Store
 *.swp
