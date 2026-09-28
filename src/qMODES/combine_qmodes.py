@@ -1,33 +1,19 @@
 #-----------------------------------------------------------------------------
-# File:          combine_qk.py
-# Author:        Bradley Kumm (brkumm@gmail.com)
-# Last Modified: 2026/04/15 (YYYY/MM/DD)
-# Description:   Functions used to aggregate the qmodes files. 
-#
-# Notes:         
-#               
-#------------------------------------------------------------------------------
-
-
-
-#-----------------------------------------------------------------------------
 # IMPORTS
-from .get_environment_variables import get_QMODES_OUTPUT_DATA_DIR, get_QMODES_PARAMETERS_FILE
-from .templates import template_combine_qmodes_file_pattern
-
-import yaml
 import os
 import glob
 import xarray as xa
 import numpy as np
 from datetime import datetime
+
+from qMODES import load_qmodes_config
 #-----------------------------------------------------------------------------
 
 
 
 #-----------------------------------------------------------------------------
 # FUNCTIONS
-def get_klb_kub_ktot_from_qmodes_filename(filename):
+def get_klb_kub_ktot_from_qmodes_filename(filename: str) -> tuple[int, int, int]:
     # input should only be the filename ... no path info.
     rep_filename = filename.replace("-", "_")
     filename_split_list = rep_filename.split("_")
@@ -40,20 +26,19 @@ def get_klb_kub_ktot_from_qmodes_filename(filename):
 
 
 def get_qmodes_files_with_date_and_ktot(date: str, ktot_str: int, 
-                                        qmodesdir:str = get_QMODES_OUTPUT_DATA_DIR()):
-    
-    pattern = template_combine_qmodes_file_pattern(qmodesdir, date, ktot_str)
+                                        config_file: str):
+
+    config_params = load_qmodes_config(config_file)
+    pattern = config_params.get_default_file_pattern("qmodes", date, ktot_str)
+
     return glob.glob(pattern)
 
 
-def check_qmodes_files_cover_ktot_range(file_list: list[str], ktot:int =None,
-                                        parameter_file:str =get_QMODES_PARAMETERS_FILE()):
+def check_qmodes_files_cover_ktot_range(file_list: list[str], 
+                                        config_file: str):
     
-    if ktot == None:
-        with open(parameter_file, 'r') as param_file:
-            params = yaml.safe_load(param_file)
-        ktot=params['mode_parameters']['nK']
-
+    config_params = load_qmodes_config(config_file)
+    ktot = config_params.nK
     ktot_range = set([i for i in range(ktot)])
 
     for fname in file_list:
@@ -62,7 +47,9 @@ def check_qmodes_files_cover_ktot_range(file_list: list[str], ktot:int =None,
         for ik in range(klb, kub+1):
             if ik in ktot_range: ktot_range.remove(ik)
             else:
-                print(f"ERROR: To combine qmodes files no files should overlap in k values or be greater than {ktot}.\n{ik} violates one of both of these.")
+                print(f"ERROR: To combine qmodes files no files should overlap in k values or be greater than {ktot}.")
+                print(f"The k value {ik} violates one of both of these.")
+
     # if all values removed from ktot one time range is covered
     if not ktot_range: 
         return True
@@ -110,7 +97,7 @@ def check_qmodes_files_have_all_modes(file_list: list[str]):
     else: return False
 
 
-def combine_qmodes_files_from_list(file_list: list[str], outfile: str):
+def combine_qmodes_files_from_list(file_list: list[str], output_filename: str):
     # initializing combined dataset to first file in file_list
     # Going to try writing one mode at a time to see how much memory is used
 
@@ -152,10 +139,10 @@ def combine_qmodes_files_from_list(file_list: list[str], outfile: str):
                                coords    = coords,
                                attrs     = attrs)
         
-        ds.to_netcdf(outfile, mode='a', engine="netcdf4")
+        ds.to_netcdf(output_filename, mode='a', engine="netcdf4")
         ds.close()
     
-    print(f"Data saved to:\n\t{outfile}")
+    print(f"Data saved to:\n\t{output_filename}")
     
     return
 #-----------------------------------------------------------------------------

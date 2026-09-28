@@ -1,6 +1,5 @@
 #------------------------------------------------------------------------------
 # IMPORTS
-import yaml
 import numpy    as np
 import xarray   as xa
 from   datetime import datetime
