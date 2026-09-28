@@ -2,4 +2,4 @@
 export PYTHONPATH="${PYTHONPATH}:${QMODES_REPO_DIR}/src/"
 
 # starting qMODES virtual environment
-source $QMODES_REPO_DIR/qMODES_venv/bin/activate
+source $QMODES_REPO_DIR/.venv/bin/activate
