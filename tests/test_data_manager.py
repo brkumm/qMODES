@@ -2,15 +2,11 @@
 # IMPORTS
 import os
 
-import yaml
 import pandas as pd
 import xarray as xa
 import numpy as np
 import argparse
 
-from qMODES import get_QMODES_TEST_INPUT_DATA_DIR, get_QMODES_TEST_PARAMETERS_FILE
-from qMODES import template_ERA_q_fname, template_ERA_uv_fname
-from qMODES import template_coef_fname, template_hough_fname, template_vsf_fname
 from qMODES import load_qmodes_config
 #-----------------------------------------------------------------------------
 
