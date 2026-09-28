@@ -144,8 +144,8 @@ class qMODES_config_parameters:
         NOTE: 
 
         Valid inputs (as a string) for the  file types variable are: 
-            qk_file_pattern
-            qmodes_file_pattern
+            qk
+            qmodes
 
         Additional required inputs:
             date (in YYYYMMDD format as a string)
@@ -153,8 +153,8 @@ class qMODES_config_parameters:
         """
 
         pattern_type_to_pattern_dict = {
-            "qk_file_pattern": f"{self.output_data_dir}/qk_data/qk_{date}0000000_klb-*_kub-*_ktot-{ktot_str}.nc",
-            "qmodes_file_pattern": f"{self.output_data_dir}/qmodes_data/qmodes_{date}0000000_klb-*_kub-*_ktot-{ktot_str}.nc"
+            "qk": f"{self.output_data_dir}/qk_data/qk_{date}0000000_klb-*_kub-*_ktot-{ktot_str}.nc",
+            "qmodes": f"{self.output_data_dir}/qmodes_data/qmodes_{date}0000000_klb-*_kub-*_ktot-{ktot_str}.nc"
         }
 
         # Input check
