@@ -1,13 +1,4 @@
 #----------------------------------------------------#
-# Ignore data files in the data directory
-# but keep the input_data and output_data directories
-# and their .gitkeep files
-#----------------------------------------------------#
-/data/**
-!/data/input_data/.gitkeep
-!/data/output_data/.gitkeep
-
-#----------------------------------------------------#
 # Ignore all run directories except for the demo 
 # directory and its contents.
 #----------------------------------------------------#
